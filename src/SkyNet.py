@@ -91,6 +91,7 @@ class _SkyNet():
           
     def fit(self,X_train,y_train,X_valid,y_valid):
         """Build a Neural Net from the training set (X_train, y_train,X_valid,y_valid).
+        
         Parameters
         ----------
         X : array-like, shape = [n_samples, n_features]
@@ -99,6 +100,7 @@ class _SkyNet():
         y : array-like, shape = [n_samples]
           The target values (class labels in classification).
         """
+ 
     
         if (y_train.dtype in ['int64','int32','int16','int8']) and (y_valid.dtype in ['int64','int32','int16','int8']):
             self.classification_network = 1
@@ -138,87 +140,31 @@ class _SkyNet():
         output_root_file = self.output_root + self.id + '_'
         self.network_file = ''.join([output_root_file,'network.txt'])
 
-        ### reform activation format to SkyNet standard ###
-        act_temp = ''
-        for act in self.activation:
-            act_temp = ''.join([act_temp,str(act)])
-
-        f_class = open(self.SkyNet_config_file,'w')
-        print >>f_class,'#input_root'  
-        print >>f_class,self.train_input_file[:-9]
-        print >>f_class,'#output_root'
-        print >>f_class,self.network_file[:-11]
-        print >>f_class,'#classification_network'
-        print >>f_class,str(self.classification_network)
-        for layer in self.layers:
-          print >>f_class,'#nhid'
-          print >>f_class,str(layer)
-        print >>f_class,'#activation'
-        print >>f_class,str(act_temp)
-        print >>f_class,'#prior'
-        print >>f_class,str(int(self.prior))
-        print >>f_class,'#whitenin'
-        print >>f_class,str(self.whitenin)
-        print >>f_class,'#whitenout'
-        print >>f_class,str(self.whitenout)
-        print >>f_class,'#noise_scaling'
-        print >>f_class,str(self.noise_scaling)
-        print >>f_class,'#set_whitened_noise'
-        print >>f_class,str(self.set_whitened_noise)
-        print >>f_class,'#sigma'
-        print >>f_class,str(self.sigma)
-        print >>f_class,'#confidence_rate'
-        print >>f_class,str(self.confidence_rate)
-        print >>f_class,'#confidence_rate_minimum'
-        print >>f_class,str(self.confidence_rate_minimum)
-        print >>f_class,'#iteration_print_frequency'
-        print >>f_class,str(self.iteration_print_frequency)
-        print >>f_class,'#fix_seed'
-        print >>f_class,str(self.fix_seed)
-        print >>f_class,'#fixed_seed'
-        print >>f_class,str(self.fixed_seed)
-        print >>f_class,'#calculate_evidence'
-        print >>f_class,str(self.calculate_evidence)
-        print >>f_class,'#resume'
-        print >>f_class,str(self.resume)
-        print >>f_class,'#historic_maxent'
-        print >>f_class,str(self.historic_maxent)
-        print >>f_class,'#recurrent'
-        print >>f_class,str(self.recurrent)
-        print >>f_class,'#convergence_function'
-        print >>f_class,str(self.convergence_function)
-        print >>f_class,'#validation_data'
-        print >>f_class,str(self.validation_data)
-        print >>f_class,'#verbose'
-        print >>f_class,str(self.verbose)
-        print >>f_class,'#pretrain'
-        print >>f_class,str(self.pretrain)
-        print >>f_class,'#nepoch'
-        print >>f_class,str(self.nepoch)
-        print >>f_class,'#max_iter'
-        print >>f_class,str(self.max_iter)
-        print >>f_class,'#line_search'
-        print >>f_class,str(self.line_search)
-        print >>f_class,'#mini-batch_fraction'
-        print >>f_class,str(self.mini_batch_fraction) 
-        f_class.close()
-
-        print 'Wrote ' + self.SkyNet_config_file
-        print 'Starting training'
-
-        ### replace os.system ###
-        # Simple command
+        binning.write_SkyNet_config_file(self.SkyNet_config_file,self.train_input_file,
+                                        self.network_file,self.classification_network,
+                                        self.layers,self.activation,self.prior,self.whitenin,
+                                        self.whitenout,self.noise_scaling,
+                                        self.set_whitened_noise,self.sigma,
+                                        self.confidence_rate,self.confidence_rate_minimum,
+                                        self.iteration_print_frequency,self.fix_seed,
+                                        self.fixed_seed,self.calculate_evidence,
+                                        self.resume,self.historic_maxent,
+                                        self.recurrent,self.convergence_function,
+                                        self.validation_data,self.verbose,
+                                        self.pretrain,self.nepoch,self.max_iter,
+                                        self.line_search,self.mini_batch_fraction,
+                                        )
         
         SkyNet_run_array = ''.join(['mpirun -np ',str(self.n_jobs),' SkyNet ',self.SkyNet_config_file])
         subprocess.call(SkyNet_run_array, shell=True)
         
-        ### pandas for faster read speeds ?? ####
         if self.classification_network:
           train_pred = np.loadtxt(output_root_file + 'train_pred.txt',usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
           valid_pred = np.loadtxt(output_root_file + 'test_pred.txt' ,usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
         else:
           train_pred = np.loadtxt(output_root_file + 'train_pred.txt',usecols=[self.n_features_,])
           valid_pred = np.loadtxt(output_root_file + 'test_pred.txt' ,usecols=[self.n_features_,])
+        
         return train_pred,valid_pred
 
 # =============================================================================
@@ -234,10 +180,11 @@ class SkyNetClassifier(_SkyNet):
 
         Parameters
         ----------
+        
         id : string,compulsory
             This is a base id used to as an identifier.
             All files written by Skynet will contain
-            id in the file-name. 
+            id in the file-name.
         
         input_root : string, optional (default=custom)
             The folder where SkyNet-wrapper will write and SkyNet wil look for the train 
@@ -374,7 +321,6 @@ class SkyNetClassifier(_SkyNet):
 
         Attributes
         ----------
-
         n_features_ : int
             The number of features 
 
@@ -405,8 +351,7 @@ class SkyNetClassifier(_SkyNet):
         --------
         SkyNetClassifier
         """
-
-    
+        
     def __init__(self,
                  id,
                  classification_network = 1,
@@ -554,6 +499,7 @@ class SkyNetRegressor(_SkyNet):
 
         Parameters
         ----------
+        
         id : string,compulsory
             This is a base id used to as an identifier.
             All files written by Skynet will contain
@@ -694,7 +640,6 @@ class SkyNetRegressor(_SkyNet):
 
         Attributes
         ----------
-
         n_features_ : int
             The number of features.
 

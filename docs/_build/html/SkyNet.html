@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 
@@ -14,7 +15,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '',
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -93,18 +94,6 @@
               
             
             
-              
-                
-  <li>
-    <a href="index.html" title="Previous Chapter: Welcome to the SkyNet (wrapper) documentation!"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Welcome to the S...</span>
-    </a>
-  </li>
-  <li>
-    <a href="test_SkyNet.html" title="Next Chapter: test_SkyNet module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">test_SkyNet modu... &raquo;</span>
-    </a>
-  </li>
-              
-            
             
             
             
@@ -136,7 +125,7 @@ SkyNet is an efficient and robust neural network
 training tool for machine learning.</p>
 <dl class="class">
 <dt id="SkyNet.SkyNetClassifier">
-<em class="property">class </em><tt class="descclassname">SkyNet.</tt><tt class="descname">SkyNetClassifier</tt><big>(</big><em>id, classification_network=1, input_root='/Users/Christopher_old/ice/data/SkyNet/train_valid/', output_root='/Users/Christopher_old/ice/data/SkyNet/network/', result_root='/Users/Christopher_old/ice/data/SkyNet/results/', config_root='/Users/Christopher_old/ice/data/SkyNet/config_files/', layers=[10, 10, 10], activation=[2, 2, 2, 0], prior=True, sigma=0.035, confidence_rate=0.3, confidence_rate_minimum=0.02, iteration_print_frequency=50, max_iter=2000, whitenin=1, whitenout=1, noise_scaling=0, set_whitened_noise=0, fix_seed=0, fixed_seed=0, calculate_evidence=1, resume=0, historic_maxent=0, recurrent=0, convergence_function=4, validation_data=1, verbose=3, pretrain=0, nepoch=10, line_search=2, mini_batch_fraction=1.0, n_jobs=1</em><big>)</big><a class="headerlink" href="#SkyNet.SkyNetClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SkyNet.</tt><tt class="descname">SkyNetClassifier</tt><big>(</big><em>id, classification_network=1, input_root='/Users/Christopher_old/ice/data/SkyNet/train_valid/', output_root='/Users/Christopher_old/ice/data/SkyNet/network/', result_root='/Users/Christopher_old/ice/data/SkyNet/results/', config_root='/Users/Christopher_old/ice/data/SkyNet/config_files/', layers=[10, 10, 10], activation=[2, 2, 2, 0], prior=True, sigma=0.035, confidence_rate=0.3, confidence_rate_minimum=0.02, iteration_print_frequency=50, max_iter=2000, whitenin=1, whitenout=1, noise_scaling=0, set_whitened_noise=0, fix_seed=0, fixed_seed=0, calculate_evidence=1, resume=0, historic_maxent=0, recurrent=0, convergence_function=4, validation_data=1, verbose=3, pretrain=0, nepoch=10, line_search=0, mini_batch_fraction=1.0, n_jobs=1</em><big>)</big><a class="headerlink" href="#SkyNet.SkyNetClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">SkyNet._SkyNet</span></tt></p>
 <p>A neural net classifier.</p>
 <p>SkyNet is an efficient and robust neural network 
@@ -146,7 +135,7 @@ calls Skynet as a classifier.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>id</strong> : string,compulsory</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>id</strong> : string,compulsory</p>
 <blockquote class="last">
 <div><blockquote>
 <div><p>This is a base id used to as an identifier.
@@ -314,39 +303,43 @@ restricted BM.</p>
 </tbody>
 </table>
 <p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="2%" />
-<col width="98%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a href="#id1"><span class="problematic" id="id2">n_features_</span></a></td>
-<td>(int) The number of features  train_input_file : string Filename of the written training file: input_root + id + train.txt  valid_input_file : string Filename of the written validation file: input_root + id + test.txt  SkyNet_config_file : string Filename of SkyNet config file: config_root + id + _cla.inp  network_file : string Filename of SkyNet network file. This file contains the trained weights: output_root + id + _network.txt</td>
-</tr>
-</tbody>
-</table>
 <dl class="method">
 <dt id="SkyNet.SkyNetClassifier.predict_proba">
 <tt class="descname">predict_proba</tt><big>(</big><em>X</em><big>)</big><a class="headerlink" href="#SkyNet.SkyNetClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict class probabilities for X.</p>
 <p>The predicted class probabilities of an input sample is computed as
-the mean predicted class probabilities of neural network.</p>
+by trained neural network</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>X</strong> : array-like of shape = [n_samples, n_features]</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>X</strong> : array-like of shape = [n_samples, n_features]</p>
 <blockquote>
 <div><p>The input samples.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>p</strong> : array of shape = [n_samples]</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>p</strong> : array of shape = [n_samples,n_classes]</p>
 <blockquote class="last">
 <div><p>The class probabilities of the input samples. The order of the
 classes corresponds to that in the attribute <cite>classes_</cite>.</p>
 </div></blockquote>
 </td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="10%" />
+<col width="71%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>output_file</td>
+<td>String</td>
+<td>SkyNet writes to this file:
+result_root + self.id + _predictions.txt.</td>
 </tr>
 </tbody>
 </table>
@@ -366,7 +359,7 @@ calls Skynet as a  regressor.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>id</strong> : string,compulsory</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>id</strong> : string,compulsory</p>
 <blockquote class="last">
 <div><blockquote>
 <div><p>This is a base id used to as an identifier.
@@ -534,17 +527,6 @@ restricted BM.</p>
 </tbody>
 </table>
 <p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="2%" />
-<col width="98%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a href="#id3"><span class="problematic" id="id4">n_features_</span></a></td>
-<td>(int) The number of features.  train_input_file : string Filename of the written training file: input_root + id + train.txt  valid_input_file : string Filename of the written validation file: input_root + id + test.txt  SkyNet_config_file : string Filename of SkyNet config file: config_root + id + _cla.inp  network_file : string Filename of SkyNet neetwork file, This file contains the trained weights: output_root + id + _network.txt.</td>
-</tr>
-</tbody>
-</table>
 <dl class="method">
 <dt id="SkyNet.SkyNetRegressor.predict">
 <tt class="descname">predict</tt><big>(</big><em>X</em><big>)</big><a class="headerlink" href="#SkyNet.SkyNetRegressor.predict" title="Permalink to this definition">¶</a></dt>
@@ -555,13 +537,13 @@ mean predicted regression targets of the trees in the forest.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>X</strong> : array-like of shape = [n_samples, n_features]</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>X</strong> : array-like of shape = [n_samples, n_features]</p>
 <blockquote>
 <div><p>The input samples.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">y: array of shape = [n_samples] or [n_samples, n_outputs]</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>y: array of shape = [n_samples] or [n_samples, n_outputs]</strong> :</p>
 <blockquote class="last">
 <div><p>The predicted values.</p>
 </div></blockquote>
@@ -595,7 +577,7 @@ mean predicted regression targets of the trees in the forest.</p>
     </p>
     <p>
         &copy; Copyright 2014, Christopher Bonnett.<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.<br/>
     </p>
   </div>
 </footer>
