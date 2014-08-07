@@ -14,9 +14,9 @@ from abc import ABCMeta, abstractmethod
 import subprocess
 import write_SkyNet_files as binning
 
-#__all__ = ["SkyNet,SkyNetClassifier,SkyNetRegressor"]
+__all__ = ["SkyNetClassifier","SkyNetRegressor"] #,SkyNetRegressor
 
-class _SkyNet():
+class SkyNet():
     """
     Skynet base class
     """
@@ -171,186 +171,145 @@ class _SkyNet():
 # Public estimators
 # =============================================================================
 
-class SkyNetClassifier(_SkyNet):
+class SkyNetClassifier(SkyNet):
     """A neural net classifier.
+    
+    This class calls Skynet as a classifier.
 
-       SkyNet is an efficient and robust neural network 
-       training tool for machine learning. This class
-       calls Skynet as a classifier.
-
-        Parameters
-        ----------
-        
-        id : string,compulsory
-            This is a base id used to as an identifier.
-            All files written by Skynet will contain
-            id in the file-name.
-        
-        input_root : string, optional (default=custom)
-            The folder where SkyNet-wrapper will write and SkyNet wil look for the train 
-            and validation files. This parameter is best adjusted
-            in SkyNet.py
-            
-        output_root : string, optional (default=custom)
-            The folder where SkyNet will write the network file
-            (i.e the trained weights) 
-            This parameter is best adjusted
-            in SkyNet.py
-        
-        result_root : string, optional (default=custom)
-            The folder where SkyNet will write prediction 
-            files.This parameter is best adjusted
-            in SkyNet.py
-            
-        config_root : string, optional (default=custom)
-            The folder where SkyNet will write the 
-            config file that it uses to train.
-            This parameter is best adjusted
-            in SkyNet.py
-            
-        layers : array , optional (default=[10,10,10])
-            The amount of hidden layers and the amount
-            of nodes per hidden layer. Default is 3 
-            hidden layers with 10 nodes in each layer.
-            
-        activation : list =, optional (default=[2,2,2,0])
-            Which activation function to use per layer:
-           | 0 = linear
-           | 1 = sigmoid
-           | 2 = tanh
-           | 3 = rectified linear
-           | 4 = sofsign
-           Needs to have len(layers) + 1 
-           as the activation of the final
-           layer needs to be set.
-        
-        prior : boolean, optional (default =True)
-            Use L2 weight regularization.
-            Strongly advised.
-        
-        mini-batch_fraction : float, optional(default=1.0)         
-            What fraction of training data to be used in each batch
-            
-        validation_data : bool, optional (default = True)             
-            Is there validation data to test against?
-            Strongly advise to use to prevent overfitting 
-                
-        confidence_rate : float, optional (default=0.03)
-            Initial learing rate
-            Step size factor, higher values are more aggressive.
-        
-        confidence_rate_minimum : float, optional (default=0.02)     
-            minimum confidence rate allowed
-
-        iteration_print_frequency : int, optional (default=50)
-            Skynet feedback frequency
-
-        max_iter : int, optional (default=2000)
-            Maxium training epochs
-
-        n_jobs : integer, optional (default=1)
-            The number of jobs to run in parallel for 'fit'.
-            
-        whitenin : integer, optional (default=1)
-            Which input transformation to use:
-           | 0 = none
-           | 1 = min-max
-           | 2 = normal.
-             
-        whitenout : integer, optional (default=1)
-            Which output transformation to use:
-          | 0 = none
-          | 1 = min-max
-          | 2 = normal.
-        
-        convergence_function : integer, optional (default=4) 
-            Which  minimization function to use for 
-            convergence testing: 
-          | 1 = log-posterior
-          | 2 = log-likelihood 
-          | 3 = correlation
-          | 4 = error squared.
-            
-        historic_maxent : bool, optional (default=False)
-            Experimental implementation of MemSys's historic maxent option.
-        
-        line_search : int, optional (default = 0)
-            Perform line search for optimal distance:
-          | 0 = none 
-          | 1 = golden section
-          | 2 = linbcg lnsrch.
-            
-        noise_scaling : bool, optional (default = False)
-            If noise level (standard deviation of outputs) is to be estimated.
-        
-        set_whitened_noise : bool, optional (default =False)          
-            Whether the noise is to be set on whitened data.
-        
-        sigma : float, optional (default = 0.3)
-            Initial noise level, set on (un-)whitened data.
-
-        fix_seed : bool, optional (default =False)                     
-            Use a fixed seed?
-            Usefull for debugging and unit-test.
-        
-        fixed_seed : int, optional (default =0)                 
-            Seed to use if fix_seed == True.
-            
-        resume : bool, optional (default = False)
-            Resume from a previous job.
-        
-        reset_alpha : bool, optional (default = False)
-            Reset hyperparameter upon resume.
-        
-        reset_sigma : bool, optional (default = False)
-            reset hyperparameters upon resume.
-        
-        randomise_weights : float, optional (default = 0.01)
-            Random factor to add to saved weights upon resume.
-
-        verbose : int, optional (default=3)                     
-            Verbosity level of feedback sent to stdout 
-            by SkyNet (0=min, 3=max).
-            
-        pretrain : bool,
-            Perform pre-training using
-            restricted BM.
-
-        nepoch : int, optional (default=10)                    
-            Number of epochs to use in pre-training.
-
-        Attributes
-        ----------
-        n_features_ : int
-            The number of features 
-
-        train_input_file : string
-            Filename of the written training file:
-            input_root + id + train.txt
-        
-        valid_input_file : string
-            Filename of the written validation file:
-            input_root + id + test.txt
-
-        SkyNet_config_file : string
-            Filename of SkyNet config file: 
-            config_root + id + _cla.inp
-
-        network_file : string
-             Filename of SkyNet network file.
-             This file contains the trained weights:
-             output_root + id + _network.txt
-        
-        References
-        ----------
-        ..  SKYNET: an efficient and robust neural network 
-            training tool for machine learning in 
-            astronomy http://arxiv.org/abs/1309.0790
-
-        See also
-        --------
-        SkyNetClassifier
-        """
+    Parameters
+    ----------
+    id : string, compulsory
+        This is a base id used to as an identifier.
+        All files written by Skynet will contain
+        id in the file-name.
+    input_root : string, optional (default=custom)
+        The folder where SkyNet-wrapper will write and SkyNet wil look for the train 
+        and validation files. This parameter is best adjusted
+        in SkyNet.py
+    output_root : string, optional (default=custom)
+        The folder where SkyNet will write the network file
+        (i.e the trained weights) 
+        This parameter is best adjusted
+        in SkyNet.py
+    result_root : string, optional (default=custom)
+        The folder where SkyNet will write prediction 
+        files.This parameter is best adjusted
+        in SkyNet.py
+    config_root : string, optional (default=custom)
+        The folder where SkyNet will write the 
+        config file that it uses to train.
+        This parameter is best adjusted
+        in SkyNet.py
+    layers : array , optional (default=[10,10,10])
+        The amount of hidden layers and the amount
+        of nodes per hidden layer. Default is 3 
+        hidden layers with 10 nodes in each layer.
+    activation : list =, optional (default=[2,2,2,0])
+        Which activation function to use per layer:
+        0 = linear
+        1 = sigmoid
+        2 = tanh
+        3 = rectified linear
+        4 = sofsign
+        Needs to have len(layers) + 1 
+        as the activation of the final
+        layer needs to be set.
+    prior : boolean, optional (default =True)
+        Use L2 weight regularization.
+        Strongly advised.
+    mini-batch_fraction : float, optional(default=1.0)         
+        What fraction of training data to be used in each batch
+    validation_data : bool, optional (default = True)             
+        Is there validation data to test against?
+        Strongly advise to use to prevent overfitting 
+    confidence_rate : float, optional (default=0.03)
+        Initial learing rate
+        Step size factor, higher values are more aggressive.
+    confidence_rate_minimum : float, optional (default=0.02)     
+        minimum confidence rate allowed
+    iteration_print_frequency : int, optional (default=50)
+        Skynet feedback frequency
+    max_iter : int, optional (default=2000)
+        Maxium training epochs
+    n_jobs : integer, optional (default=1)
+        The number of jobs to run in parallel for 'fit'.
+    whitenin : integer, optional (default=1)
+        Which input transformation to use:
+        0 = none
+        1 = min-max
+        2 = normal.
+    whitenout : integer, optional (default=1)
+        Which output transformation to use:
+        0 = none
+        1 = min-max
+        2 = normal.
+    convergence_function : integer, optional (default=4) 
+        Which  minimization function to use for 
+        convergence testing: 
+        1 = log-posterior
+        2 = log-likelihood 
+        3 = correlation
+        4 = error squared.
+    historic_maxent : bool, optional (default=False)
+        Experimental implementation of MemSys's historic maxent option.
+    line_search : int, optional (default = 0)
+        Perform line search for optimal distance:
+        0 = none 
+        1 = golden section
+        2 = linbcg lnsrch.
+    noise_scaling : bool, optional (default = False)
+        If noise level (standard deviation of outputs) is to be estimated.
+    set_whitened_noise : bool, optional (default =False)          
+        Whether the noise is to be set on whitened data.
+    sigma : float, optional (default = 0.3)
+        Initial noise level, set on (un-)whitened data.
+    fix_seed : bool, optional (default =False)                     
+        Use a fixed seed?
+        Usefull for debugging and unit-test.
+    fixed_seed : int, optional (default =0)                 
+        Seed to use if fix_seed == True.
+    resume : bool, optional (default = False)
+        Resume from a previous job.
+    reset_alpha : bool, optional (default = False)
+        Reset hyperparameter upon resume.
+    reset_sigma : bool, optional (default = False)
+        reset hyperparameters upon resume.
+    randomise_weights : float, optional (default = 0.01)
+        Random factor to add to saved weights upon resume.
+    verbose : int, optional (default=3)                     
+        Verbosity level of feedback sent to stdout 
+        by SkyNet (0=min, 3=max).
+    pretrain : bool,
+        Perform pre-training using
+        restricted BM.
+    nepoch : int, optional (default=10)                    
+        Number of epochs to use in pre-training.    
+    
+    Attributes
+    ----------
+    n_features :  int
+        The number of features.
+    train_input_file : string
+        Filename of the written training file.
+    valid_input_file : string.
+        Filename of the written validation file.
+    SkyNet_config_file : string
+        Filename of SkyNet config file.
+    network_file : string
+        Filename of SkyNet network file.
+        This file contains the trained weights:
+    
+    References
+    ----------
+    .. [1] SKYNET: an efficient and robust neural network 
+        training tool for machine learning in 
+        astronomy http://arxiv.org/abs/1309.0790
+    
+    See also
+    --------
+    SkyNetRegressor
+    """
+ 
         
     def __init__(self,
                  id,
@@ -490,186 +449,142 @@ class SkyNetClassifier(_SkyNet):
         
         return predictions
 
-class SkyNetRegressor(_SkyNet):
-    """A neural net regressor.
+class SkyNetRegressor(SkyNet):
+    """A neural net regeressor.
 
-       SkyNet is an efficient and robust neural network 
-       training tool for machine learning. This class
-       calls Skynet as a  regressor.
-
-        Parameters
-        ----------
-        
-        id : string,compulsory
-            This is a base id used to as an identifier.
-            All files written by Skynet will contain
-            id in the file-name. 
-        
-        input_root : string, optional (default=custom)
-            The folder where SkyNet will look for the train 
-            and validation files. This parameter is best adjusted
-            in SkyNet.py
-            
-        output_root : string, optional (default=custom)
-            The folder where SkyNet will write the network file
-            (i.e the trained weights) 
-            This parameter is best adjusted
-            in SkyNet.py
-        
-        result_root : string, optional (default=custom)
-            The folder where SkyNet will write prediction 
-            files.This parameter is best adjusted
-            in SkyNet.py
-            
-        config_root : string, optional (default=custom)
-            The folder where SkyNet will write the 
-            config file that it uses to train.
-            This parameter is best adjusted
-            in SkyNet.py
-            
-        layers : array , optional (default=[10,10,10])
-            The amount of hidden layers and the amount
-            of nodes per hidden layer. Default is 3 
-            hidden layers with 10 nodes in each layer.
-            
-        activation : list =, optional (default=[2,2,2,0])
-            Which activation function to use per layer:
-           | 0 = linear
-           | 1 = sigmoid
-           | 2 = tanh
-           | 3 = rectified linear
-           | 4 = sofsign
-           Needs to have len(layers) + 1 
-           as the activation of the final
-           layer needs to be set.
-        
-        prior : boolean, optional (default =True)
-            Use L2 weight regularization.
-            Strongly advised
-        
-        mini-batch_fraction : float, optional(default=1.0)         
-            What fraction of training data to be used in each batch
-            
-        validation_data : bool, optional (default = True)             
-            Is there validation data to test against?
-            Strongly advise to use to prevent overfitting 
-                
-        confidence_rate : float, optional (default=0.03)
-            Initial learing rate
-            Step size factor, higher values are more aggressive.
-        
-        confidence_rate_minimum : float, optional (default=0.02)     
-            minimum confidence rate allowed
-
-        iteration_print_frequency : int, optional (default=50)
-            Skynet feedback frequency
-
-        max_iter : int, optional (default=2000)
-            Maxium training epochs
-
-        n_jobs : integer, optional (default=1)
-            The number of jobs to run in parallel for 'fit'.
-            
-        whitenin : integer, optional (default=1)
-            Which input transformation to use:
-           | 0 = none
-           | 1 = min-max
-           | 2 = normal.
-             
-        whitenout : integer, optional (default=1)
-            Which output transformation to use:
-          | 0 = none
-          | 1 = min-max
-          | 2 = normal.
-        
-        convergence_function : integer, optional (default=4) 
-            Which  minimization function to use for 
-            convergence testing: 
-          | 1 = log-posterior
-          | 2 = log-likelihood 
-          | 3 = correlation
-          | 4 = error squared.
-            
-        historic_maxent : bool, optional (default=False)
-            Experimental implementation of MemSys's historic maxent option.
-        
-        line_search : int, optional (default = 0)
-            Perform line search for optimal distance:
-          | 0 = none 
-          | 1 = golden section
-          | 2 = linbcg lnsrch.
-            
-        noise_scaling : bool, optional (default = False)
-            If noise level (standard deviation of outputs) is to be estimated.
-        
-        set_whitened_noise : bool, optional (default =False)          
-            Whether the noise is to be set on whitened data.
-        
-        sigma : float, optional (default = 0.3)
-            Initial noise level, set on (un-)whitened data.
-
-        fix_seed : bool, optional (default =False)                     
-            Use a fixed seed?
-            Usefull for debugging and unit-test.
-        
-        fixed_seed : int, optional (default =0)                 
-            Seed to use if fix_seed == True.
-            
-        resume : bool, optional (default = False)
-            Resume from a previous job.
-        
-        reset_alpha : bool, optional (default = False)
-            Reset hyperparameter upon resume.
-        
-        reset_sigma : bool, optional (default = False)
-            reset hyperparameters upon resume.
-        
-        randomise_weights : float, optional (default = 0.01)
-            Random factor to add to saved weights upon resume.
-
-        verbose : int, optional (default=3)                     
-            Verbosity level of feedback sent to stdout 
-            by SkyNet (0=min, 3=max).
-            
-        pretrain : bool,
-            Perform pre-training using
-            restricted BM.
-
-        nepoch : int, optional (default=10)                    
-            Number of epochs to use in pre-training.
-
-        Attributes
-        ----------
-        n_features_ : int
-            The number of features.
-
-        train_input_file : string
-            Filename of the written training file:
-            input_root + id + train.txt
-        
-        valid_input_file : string
-            Filename of the written validation file:
-            input_root + id + test.txt
-
-        SkyNet_config_file : string
-            Filename of SkyNet config file:
-            config_root + id + _cla.inp
-
-        network_file : string
-             Filename of SkyNet neetwork file,
-             This file contains the trained weights:
-             output_root + id + _network.txt.
-        
-        References
-        ----------
-        ..  SKYNET: an efficient and robust neural network 
-            training tool for machine learning in 
-            astronomy http://arxiv.org/abs/1309.0790
-
-        See also
-        --------
-        SkyNetClassifier
-        """
+    Parameters
+    ----------
+    id : string, compulsory
+        This is a base id used to as an identifier.
+        All files written by Skynet will contain
+        id in the file-name.
+    input_root : string, optional (default=custom)
+        The folder where SkyNet-wrapper will write and SkyNet wil look for the train 
+        and validation files. This parameter is best adjusted
+        in SkyNet.py
+    output_root : string, optional (default=custom)
+        The folder where SkyNet will write the network file
+        (i.e the trained weights) 
+        This parameter is best adjusted
+        in SkyNet.py
+    result_root : string, optional (default=custom)
+        The folder where SkyNet will write prediction 
+        files.This parameter is best adjusted
+        in SkyNet.py
+    config_root : string, optional (default=custom)
+        The folder where SkyNet will write the 
+        config file that it uses to train.
+        This parameter is best adjusted
+        in SkyNet.py
+    layers : array , optional (default=[10,10,10])
+        The amount of hidden layers and the amount
+        of nodes per hidden layer. Default is 3 
+        hidden layers with 10 nodes in each layer.
+    activation : list =, optional (default=[2,2,2,0])
+        Which activation function to use per layer:
+        0 = linear
+        1 = sigmoid
+        2 = tanh
+        3 = rectified linear
+        4 = sofsign
+        Needs to have len(layers) + 1 
+        as the activation of the final
+        layer needs to be set.
+    prior : boolean, optional (default =True)
+        Use L2 weight regularization.
+        Strongly advised.
+    mini-batch_fraction : float, optional(default=1.0)         
+        What fraction of training data to be used in each batch
+    validation_data : bool, optional (default = True)             
+        Is there validation data to test against?
+        Strongly advise to use to prevent overfitting 
+    confidence_rate : float, optional (default=0.03)
+        Initial learing rate
+        Step size factor, higher values are more aggressive.
+    confidence_rate_minimum : float, optional (default=0.02)     
+        minimum confidence rate allowed
+    iteration_print_frequency : int, optional (default=50)
+        Skynet feedback frequency
+    max_iter : int, optional (default=2000)
+        Maxium training epochs
+    n_jobs : integer, optional (default=1)
+        The number of jobs to run in parallel for 'fit'.
+    whitenin : integer, optional (default=1)
+        Which input transformation to use:
+        0 = none
+        1 = min-max
+        2 = normal.
+    whitenout : integer, optional (default=1)
+        Which output transformation to use:
+        0 = none
+        1 = min-max
+        2 = normal.
+    convergence_function : integer, optional (default=4) 
+        Which  minimization function to use for 
+        convergence testing: 
+        1 = log-posterior
+        2 = log-likelihood 
+        3 = correlation
+        4 = error squared.
+    historic_maxent : bool, optional (default=False)
+        Experimental implementation of MemSys's historic maxent option.
+    line_search : int, optional (default = 0)
+        Perform line search for optimal distance:
+        0 = none 
+        1 = golden section
+        2 = linbcg lnsrch.
+    noise_scaling : bool, optional (default = False)
+        If noise level (standard deviation of outputs) is to be estimated.
+    set_whitened_noise : bool, optional (default =False)          
+        Whether the noise is to be set on whitened data.
+    sigma : float, optional (default = 0.3)
+        Initial noise level, set on (un-)whitened data.
+    fix_seed : bool, optional (default =False)                     
+        Use a fixed seed?
+        Usefull for debugging and unit-test.
+    fixed_seed : int, optional (default =0)                 
+        Seed to use if fix_seed == True.
+    resume : bool, optional (default = False)
+        Resume from a previous job.
+    reset_alpha : bool, optional (default = False)
+        Reset hyperparameter upon resume.
+    reset_sigma : bool, optional (default = False)
+        reset hyperparameters upon resume.
+    randomise_weights : float, optional (default = 0.01)
+        Random factor to add to saved weights upon resume.
+    verbose : int, optional (default=3)                     
+        Verbosity level of feedback sent to stdout 
+        by SkyNet (0=min, 3=max).
+    pretrain : bool,
+        Perform pre-training using
+        restricted BM.
+    nepoch : int, optional (default=10)                    
+        Number of epochs to use in pre-training.    
+    
+    Attributes
+    ----------
+    n_features :  int
+        The number of features.
+    train_input_file : string
+        Filename of the written training file.
+    valid_input_file : string.
+        Filename of the written validation file.
+    SkyNet_config_file : string
+        Filename of SkyNet config file.
+    network_file : string
+        Filename of SkyNet network file.
+        This file contains the trained weights:
+    
+    References
+    ----------
+    .. [1] SKYNET: an efficient and robust neural network 
+        training tool for machine learning in 
+        astronomy http://arxiv.org/abs/1309.0790
+    
+    See also
+    --------
+    SkyNetClassifier
+    """
     
     def __init__(self,
                  id,
@@ -741,17 +656,24 @@ class SkyNetRegressor(_SkyNet):
     def predict(self, X):
         """Predict regression target for X.
 
-        The predicted regression target of an input sample is computed as the
-        mean predicted regression targets of the trees in the forest.
+        The predicted regression target of an input sample is by the trained
+        neural network.
 
         Parameters
         ----------
         X : array-like of shape = [n_samples, n_features]
             The input samples.
 
+        
+        Attributes
+        ----------
+        output_file : String
+            SkyNet writes to this file:
+            result_root + self.id + _predictions.txt.
+        
         Returns
         -------
-        y: array of shape = [n_samples] or [n_samples, n_outputs]
+        y: array of shape = [n_samples]
             The predicted values.
         """   
         

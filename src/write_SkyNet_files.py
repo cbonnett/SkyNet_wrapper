@@ -118,7 +118,7 @@ def write_SkyNet_cla_bin(outfile,features,classes):
             filename to be written.
         features : array of [n_samples, n_features]
             The feature array.
-        classes :integer array of [n_samples]
+        classes : integer array of [n_samples]
             The classes that belong to the features.
     """
     assert len(features[:,0]) == len(classes), 'Length of feature array not equal to length of classes array'
@@ -154,7 +154,7 @@ def write_SkyNet_reg(outfile,features,reg):
             filename to be written.
         features : array of [n_samples, n_features]
             The feature array.
-        reg :float array of [n_samples]
+        reg : float array of [n_samples]
             The regression values that belong to the features.
     """
     assert len(features[:,0]) == len(reg), 'Length of feature array is equal to length of reg array'
