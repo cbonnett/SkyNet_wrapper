@@ -39,7 +39,7 @@ test data
 We instantiate the neural network with 3 hidden layers with each 10 nodes ``[10,10,10]`` on the training data.
 With linear rectified units as activation functions for the hidden layers and linear activation for the
 outputlayer ``[3,3,3,0]`` on a single core ``n_jobs=1``. 
-We use the string 'identification' as id.
+We use the string ``identification`` as id.
 
 .. code:: python
     

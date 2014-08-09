@@ -6,7 +6,7 @@ An introduction to regression with pySkyNet
 Regression : Predicting a continuous value for a new example.
 
 | In the following example we will use the ``SkyNetRegressor`` class to estimate Boston housing prices. 
-| You will need `sklearn <http://scikit-learn.org/stable/>`_ library to load the boston dataset.  
+| You will need `sklearn <http://scikit-learn.org/stable/>`_ library to load the Boston dataset.  
 
 .. code:: python
 
@@ -40,6 +40,7 @@ test data
 We instantiate the neural network with 3 hidden layers with each 10 nodes ``[10,10,10]`` on the training data.
 With linear rectified units as activation functions for the hidden layers and linear activation for the
 outputlayer ``[3,3,3,0]`` on a single core ``n_jobs=1``.
+We use the string ``identification`` as id.
 
 .. code:: python
     
@@ -70,9 +71,3 @@ Compare the predictions
    Mean error squared training    =  10.9789472372
    Mean error squared validation  =  15.7155137255
    Mean error squared test        =  9.75942040179
-
-
-
-
-
-  

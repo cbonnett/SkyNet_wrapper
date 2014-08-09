@@ -1,6 +1,8 @@
 pySkyNet a Python wrapper for SkyNet
 ==============
 
+Documentation : http://pyskynet.readthedocs.org/en/latest/index.html
+
 A python wrapper for SkyNet neural network that can de downloaded here :
 http://ccpforge.cse.rl.ac.uk/gf/project/skynet/
 
