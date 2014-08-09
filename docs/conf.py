@@ -24,7 +24,7 @@ import sphinx_bootstrap_theme
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 # sys.path.insert(0,'anaconda/lib/python2.7/site-packages/sphinx_bootstrap_theme/')
 sys.path.insert(0, os.path.abspath(os.path.pardir))
-
+sys.path.insert(0, os.path.abspath('sphinxext'))
 # -- General configuration ------------------------------------------------
 
 # import sphinx_rtd_theme

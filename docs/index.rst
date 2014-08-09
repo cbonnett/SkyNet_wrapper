@@ -1,10 +1,17 @@
+.. raw:: html
+
+    <a href=" https://github.com/cbonnett/SkyNet_wrapper"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_blue_aa0000.png" alt="Fork me on GitHub"></a>
+
+    <div class="example-banner"></div>
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="_static/banner_data.js"></script>
+
 =============================================
 Welcome to the pySkyNet documentation
 =============================================
 
 .. _`pySkyNet`: https://github.com/cbonnett/SkyNet_wrapper
-
-
 
 | SkyNet is an efficient and robust neural network training code for machine learning. It is able to train large and deep feed-forward neural networks, including autoencoders, for use in a wide range of supervised and unsupervised learning applications, such as regression, classification, density estimation, clustering and dimensionality reduction. SkyNet is implemented in C/C++ and fully parallelised using MPI.
 
