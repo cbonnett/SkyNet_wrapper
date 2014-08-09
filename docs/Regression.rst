@@ -1,7 +1,7 @@
 .. _regression:
 
 An introduction to regression with pySkyNet
-=========================================
+===========================================
 
 Regression : Predicting a continuous value for a new example.
 

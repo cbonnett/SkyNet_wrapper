@@ -1,7 +1,7 @@
 .. _classification:
 
 An introduction to classification with pySkyNet
-=============================================
+===============================================
 Regression : Predicting a continuous value for a new example.
 
 | In the following example we will use the ``SkyNetClassifier`` class to classify flowers in the iris dataset. 

@@ -1,8 +1,6 @@
 SkyNet module
 =============
 
-.. automodule:: SkyNet
-.. autoclass:: SkyNet
-    :members: SkyNetClassifier,SkyNetRegressor
+.. autoclass:: SkyNetClassifier,SkyNetRegressor
     :undoc-members:
     :show-inheritance:
