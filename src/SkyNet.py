@@ -14,16 +14,7 @@ from abc import ABCMeta, abstractmethod
 import subprocess
 import write_SkyNet_files as binning
 
-# import fcntl 
-# import os 
-# import sys 
-	 
-# def make_blocking(fd): 
-#     flags = fcntl.fcntl(fd, fcntl.F_GETFL) 
-#     if flags & os.O_NONBLOCK: 
-#         fcntl.fcntl(fd, fcntl.F_SETFL, flags & ~os.NONBLOCK)
-
-__all__ = ["SkyNetClassifier","SkyNetRegressor"] #,SkyNetRegressor
+__all__ = ["SkyNetClassifier","SkyNetRegressor"] 
 
 def parse_SkyNet_output(out):
     '''Parse stdout from SkyNet and print summary to screen

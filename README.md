@@ -1,4 +1,4 @@
-SkyNet Python (wrapper)
+pySkyNet a Python wrapper for SkyNet
 ==============
 
 A python wrapper for SkyNet neural network that can de downloaded here :
