@@ -31,6 +31,7 @@ Contents:
 
    Regression
    Classification
+   files
    
 .. raw:: html
 

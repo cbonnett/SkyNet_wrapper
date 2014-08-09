@@ -363,18 +363,12 @@ class SkyNetClassifier(SkyNet):
             The class probabilities of the input samples. The order of the
             classes corresponds to that in the attribute `classes_`.
         """
-        
-        ###########################
-        #####  set file names  ####
-        ###########################
-        
+    
+        ###  set file names  ###    
         self.pred_input_file = self.input_root  + self.id + '_to_predict.txt'
         self.output_file     = self.result_root + self.id + '_predictions.txt'
 
-        #################################
-        #####  check feature lenght  ####
-        #################################
-
+        ###  check feature lenght  ###
         n_samples_pred, pred_n_features_ = X.shape
         if self.n_features_ != pred_n_features_:
             raise ValueError("Number of features in prediction set must "
@@ -383,13 +377,10 @@ class SkyNetClassifier(SkyNet):
                              "Prediction set has %s features "
                              % (self.n_features_, pred_n_features_))
 
-        dummy_classes = np.random.randint(0, high=self.n_classes_, size=n_samples_pred)
+        dummy_classes = np.random.randint(0,high=self.n_classes_,size=n_samples_pred)
         binning.write_SkyNet_cla_bin(self.pred_input_file,X,dummy_classes)
         
-        ###########################
         ### check file exitence ###
-        ###########################
-        
         if not os.path.isfile(self.network_file):
             raise IOError("Network file %s not found "  % (self.network_file))
         if not os.path.isfile(self.train_input_file):
@@ -397,17 +388,12 @@ class SkyNetClassifier(SkyNet):
         if not os.path.isfile(self.pred_input_file):
             raise IOError("Prediction file %s not found " % (self.pred_input_file))
 
-        ############################
         ### calulate predictions ###
-        ############################
-        
         SkyNet_predictions_string = ''.join(['CalPred',' 0 1 0 ',self.network_file,' ',self.train_input_file,' ',self.pred_input_file,' ',self.output_file,' 0 0 0'])
         p = subprocess.Popen(SkyNet_predictions_string, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         out, err = p.communicate()
-
-        ###########################
-        ### read in prediction ####
-        ###########################
+        
+        ### read in prediction ###
         predictions = np.loadtxt(self.output_file,usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
         
         return predictions
@@ -648,17 +634,11 @@ class SkyNetRegressor(SkyNet):
             The predicted values.
         """   
         
-        ###########################
-        #####  set file names  ####
-        ###########################
-
+        ### set file names  ###
         self.pred_input_file = self.input_root  + self.id + '_to_predict.txt'
         self.output_file     = self.result_root + self.id + '_predictions.txt'
 
-        ##################################
-        #####  check feature lenght  #####
-        ##################################
-
+        #####  check feature lenght  ###
         n_samples_pred, pred_n_features_ = X.shape
         if self.n_features_ != pred_n_features_:
             raise ValueError("Number of features in prediction set must "
@@ -667,30 +647,23 @@ class SkyNetRegressor(SkyNet):
                              "Prediction set has %s features "
                              % (self.n_features_, pred_n_features_))
 
-        dummy_classes = np.zeros(n_samples_pred)
-        binning.write_SkyNet_cla_bin(self.pred_input_file,X,dummy_classes)
+        dummy_targets = np.zeros(n_samples_pred)
+        binning.write_SkyNet_cla_bin(self.pred_input_file,X,dummy_targets)
 
-        SkyNet_predictions_string = ''.join(['CalPred',' 0 0 0 ',self.network_file,' ',self.train_input_file,' ',self.pred_input_file,' ',self.output_file,' 0 0 0']) 
-
-        ############################
         ### check file exitence ###
-        ###########################
         if not os.path.isfile(self.network_file):
             raise IOError("Network file %s not found "  % (self.network_file))
         if not os.path.isfile(self.train_input_file):
             raise IOError("Input file %s not found "  % (self.train_input_file))
         if not os.path.isfile(self.pred_input_file):
             raise IOError("Prediction file %s not found "  % (self.pred_input_file))
-
-        ############################
+            
         ### calulate predictions ###
-        ############################
+        SkyNet_predictions_string = ''.join(['CalPred',' 0 0 0 ',self.network_file,' ',self.train_input_file,' ',self.pred_input_file,' ',self.output_file,' 0 0 0']) 
         p = subprocess.Popen(SkyNet_predictions_string, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         out, err = p.communicate()
         
-        ###########################
         ### read in prediction ####
-        ###########################
         predictions = np.loadtxt(self.output_file,usecols=[self.n_features_ +1,])
 
         return predictions
