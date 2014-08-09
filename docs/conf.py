@@ -23,8 +23,6 @@ import sphinx_bootstrap_theme
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 # sys.path.insert(0,'anaconda/lib/python2.7/site-packages/sphinx_bootstrap_theme/')
-sys.path.insert(0, os.path.abspath(os.path.pardir))
-sys.path.insert(0, os.path.abspath('sphinxext'))
 sys.path.insert(0, os.path.abspath('../src'))
 
 

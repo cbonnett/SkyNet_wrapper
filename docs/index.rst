@@ -44,5 +44,7 @@ Contents:
    
    SkyNet
    write_SkyNet_files
+   test_SkyNet
+
 
 
