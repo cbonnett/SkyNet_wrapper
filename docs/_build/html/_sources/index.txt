@@ -10,7 +10,6 @@ Welcome to the pySkyNet documentation
 | pySkyNet is a poor-mans wrapper (it makes system calls to SkyNet) that emulates the `fit` and `predict` user interface of `sklearn <http://scikit-learn.org/stable/>`_.
 
 
-
 .. note::
 
    | You need to have the mpi version of SkyNet installed for pySkyNet to work!
@@ -23,8 +22,8 @@ Contents:
 .. raw:: html
 
    <div class="container-fluid">
-   <div class="row">
-   <div class="col-md-6">
+   <div class="row-fluid">
+   <div class="span2">
    <h2>Getting Started:</h2>
 
 .. toctree::
