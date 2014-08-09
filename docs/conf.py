@@ -25,6 +25,9 @@ import sphinx_bootstrap_theme
 # sys.path.insert(0,'anaconda/lib/python2.7/site-packages/sphinx_bootstrap_theme/')
 sys.path.insert(0, os.path.abspath(os.path.pardir))
 sys.path.insert(0, os.path.abspath('sphinxext'))
+sys.path.insert(0, os.path.abspath('../src'))
+
+
 # -- General configuration ------------------------------------------------
 
 # import sphinx_rtd_theme
