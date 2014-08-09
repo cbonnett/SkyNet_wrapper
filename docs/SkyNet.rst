@@ -1,4 +1,6 @@
-.. SkyNet:
+..SkyNet:
+
+SkyNet module
 =============
 
 .. automodule:: SkyNet
