@@ -4,6 +4,6 @@ SkyNet module
 =============
 
 .. automodule:: SkyNet
-    :members:
+    :members: SkyNetClassifier,SkyNetRegressor
     :undoc-members:
     :show-inheritance:
