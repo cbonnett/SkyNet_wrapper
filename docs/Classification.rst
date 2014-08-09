@@ -49,10 +49,11 @@ Now we perform the actual training of the neural network
 
 .. code:: python 
     
-    train_yhat,valid_yhat = sn_cla.fit(X_train,y_train,X_valid,y_valid)
+    sn_cla.fit(X_train,y_train,X_valid,y_valid)
     
-| Here ``train_yhat`` are the learned class probabilities  for the training set.
-| Here ``valid_yhat`` are the learned class probabilities  for for the validation set.
+    
+| Whereafter ``sn_cla.train_pred`` are the learned class probabilities  for the training set.
+| Whereafter ``sn_cla.valid_pred`` are the learned class probabilities  for for the validation set.
 
 Getting the predictions for the test set
 

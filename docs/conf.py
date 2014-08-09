@@ -23,16 +23,9 @@ import sphinx_bootstrap_theme
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 # sys.path.insert(0,'anaconda/lib/python2.7/site-packages/sphinx_bootstrap_theme/')
-
-# -- General configuration ------------------------------------------------
-
-sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/")
-sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/src/")
-sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper")
-sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/src")
-
 sys.path.insert(0, os.path.abspath(os.path.pardir))
 
+# -- General configuration ------------------------------------------------
 
 # import sphinx_rtd_theme
 # html_theme = "sphinx_rtd_theme"

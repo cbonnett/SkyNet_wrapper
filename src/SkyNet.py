@@ -44,24 +44,28 @@ class SkyNet():
                  confidence_rate_minimum=0.02,
                  iteration_print_frequency=50,
                  max_iter=2000,
-                 whitenin = 1,
-                 whitenout = 1,
+                 whitenin = True,
+                 whitenout = True,
                  noise_scaling=0,
-                 set_whitened_noise=0,
+                 set_whitened_noise = False,
                  sigma=0.035,
-                 fix_seed = 0,
+                 fix_seed = False,
                  fixed_seed = 0,
-                 calculate_evidence = 1,
-                 resume=0,
-                 historic_maxent=0,
-                 recurrent = 0,
+                 calculate_evidence = True,
+                 historic_maxent=False,
+                 recurrent = False,
                  convergence_function = 4,
-                 validation_data = 1,
+                 validation_data = True,
                  verbose = 3,
-                 pretrain = 0,
+                 pretrain = False,
                  nepoch = 10,
                  line_search = 0,
                  mini_batch_fraction =1.0,
+                 resume=False,
+                 norbias=False,
+                 reset_alpha=False,
+                 reset_sigma=False,
+                 randomise_weights=0.1,
                  n_jobs=1):
 
         self.id = id
@@ -95,6 +99,10 @@ class SkyNet():
         self.activation = activation
         self.mini_batch_fraction  = mini_batch_fraction 
         self.line_search = line_search
+        self.norbias = norbias
+        self.reset_alpha = reset_alpha
+        self.reset_sigma = reset_sigma
+        self.randomise_weights = randomise_weights
           
     def fit(self,X_train,y_train,X_valid,y_valid):
         """Build a Neural Net from the training set (X_train, y_train,X_valid,y_valid).
@@ -107,19 +115,14 @@ class SkyNet():
         y : array-like, shape = [n_samples]
           The target values (class labels in classification).
         """
-        X_train2 = X_train
-        X_valid2 = X_valid
-        
-        y_train2 = y_train
-        y_valid2 = y_valid
 
-        if (y_train2.dtype in ['int64','int32','int16','int8']) and (y_valid2.dtype in ['int64','int32','int16','int8']):
+        if (y_train.dtype in ['int64','int32','int16','int8']) and (y_valid.dtype in ['int64','int32','int16','int8']):
             self.classification_network = 1
         else:
             self.classification_network = 0
         
-        n_samples_train, self.n_features_ = X_train2.shape
-        n_samples_valid, valid_features   = X_valid2.shape
+        n_samples_train, self.n_features_ = X_train.shape
+        n_samples_valid, valid_features   = X_valid.shape
         if self.n_features_ != valid_features:
             raise ValueError("Number of features in validation set must "
                              " match the training set. Train n_features is %s and "
@@ -127,9 +130,9 @@ class SkyNet():
                              % (self.n_features_, valid_features))
 
         if self.classification_network :
-            self.n_classes_ = len(np.unique(y_train2))
-            self.classes_   = np.unique(y_train2)
-            classes_valid   = np.unique(y_valid2)
+            self.n_classes_ = len(np.unique(y_train))
+            self.classes_   = np.unique(y_train)
+            classes_valid   = np.unique(y_valid)
             if not np.array_equal(self.classes_,classes_valid):
                 raise ValueError("Training and validation must have the same "
                                  "number of classes. Train has  %s classes " 
@@ -140,12 +143,12 @@ class SkyNet():
         self.valid_input_file  = self.input_root + self.id + 'test.txt'
 
         if self.classification_network:
-            binning.write_SkyNet_cla_bin(self.train_input_file,X_train2,y_train2)
-            binning.write_SkyNet_cla_bin(self.valid_input_file,X_valid2,y_valid2)
+            binning.write_SkyNet_cla_bin(self.train_input_file,X_train,y_train)
+            binning.write_SkyNet_cla_bin(self.valid_input_file,X_valid,y_valid)
             self.SkyNet_config_file =  self.config_root + self.id + '_cla.inp'
         else :
-            binning.write_SkyNet_reg(self.train_input_file,X_train2,y_train2)
-            binning.write_SkyNet_reg(self.valid_input_file,X_valid2,y_valid2)
+            binning.write_SkyNet_reg(self.train_input_file,X_train,y_train)
+            binning.write_SkyNet_reg(self.valid_input_file,X_valid,y_valid)
             self.SkyNet_config_file =  self.config_root + self.id + '_reg.inp'
 
         output_root_file = self.output_root + self.id + '_'
@@ -164,6 +167,8 @@ class SkyNet():
                                         self.validation_data,self.verbose,
                                         self.pretrain,self.nepoch,self.max_iter,
                                         self.line_search,self.mini_batch_fraction,
+                                        self.norbias,self.reset_alpha,
+                                        self.reset_sigma,self.randomise_weights
                                         )
         ### run SkyNet and catch output ###
         SkyNet_run_array = ''.join(['mpirun -np ',str(self.n_jobs),' SkyNet ',self.SkyNet_config_file])            
@@ -171,15 +176,13 @@ class SkyNet():
         out, err = p.communicate()
         parse_SkyNet_output(out)
         
-        
+        ### read the results from the files ###
         if self.classification_network:
-            train_pred = np.loadtxt(output_root_file + 'train_pred.txt',usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
-            valid_pred = np.loadtxt(output_root_file + 'test_pred.txt' ,usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
+            self.train_pred = np.loadtxt(output_root_file + 'train_pred.txt',usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
+            self.valid_pred = np.loadtxt(output_root_file + 'test_pred.txt' ,usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
         else:
-            train_pred = np.loadtxt(output_root_file + 'train_pred.txt',usecols=[self.n_features_ +1,])
-            valid_pred = np.loadtxt(output_root_file + 'test_pred.txt' ,usecols=[self.n_features_ +1,])
-        
-        return train_pred,valid_pred
+            self.train_pred = np.loadtxt(output_root_file + 'train_pred.txt',usecols=[self.n_features_ +1,])
+            self.valid_pred = np.loadtxt(output_root_file + 'test_pred.txt' ,usecols=[self.n_features_ +1,])
 
 # =============================================================================
 # Public estimators
@@ -335,28 +338,32 @@ class SkyNetClassifier(SkyNet):
                  layers=[10,10,10],
                  activation = [2,2,2,0],
                  prior=True,
-                 sigma=0.035,
                  confidence_rate=0.3,
                  confidence_rate_minimum=0.02,
                  iteration_print_frequency=50,
                  max_iter=2000,
-                 whitenin = 1,
-                 whitenout = 1,
+                 whitenin = True,
+                 whitenout = True,
                  noise_scaling=0,
-                 set_whitened_noise=0,
-                 fix_seed = 0,
+                 set_whitened_noise = False,
+                 sigma=0.035,
+                 fix_seed = False,
                  fixed_seed = 0,
-                 calculate_evidence = 1,
-                 resume=0,
-                 historic_maxent=0,
-                 recurrent = 0,
+                 calculate_evidence = True,
+                 historic_maxent=False,
+                 recurrent = False,
                  convergence_function = 4,
-                 validation_data = 1,
+                 validation_data = True,
                  verbose = 3,
-                 pretrain = 0,
+                 pretrain = False,
                  nepoch = 10,
                  line_search = 0,
                  mini_batch_fraction =1.0,
+                 resume=False,
+                 norbias=False,
+                 reset_alpha=False,
+                 reset_sigma=False,
+                 randomise_weights=0.1,
                  n_jobs=1):
     
          self.id = id
@@ -391,7 +398,11 @@ class SkyNetClassifier(SkyNet):
          self.activation = activation
          self.mini_batch_fraction  = mini_batch_fraction 
          self.line_search = line_search
-
+         self.norbias = norbias
+         self.reset_alpha = reset_alpha
+         self.reset_sigma = reset_sigma
+         self.randomise_weights = randomise_weights
+         
     def predict_proba(self, X):
         """Predict class probabilities for X.
 
@@ -610,28 +621,32 @@ class SkyNetRegressor(SkyNet):
                  layers=[10,10,10],
                  activation = [2,2,2,0],
                  prior=True,
-                 sigma=0.035,
                  confidence_rate=0.3,
                  confidence_rate_minimum=0.02,
                  iteration_print_frequency=50,
                  max_iter=2000,
-                 whitenin = 1,
-                 whitenout = 1,
+                 whitenin = True,
+                 whitenout = True,
                  noise_scaling=0,
-                 set_whitened_noise=0,
-                 fix_seed = 0,
+                 set_whitened_noise = False,
+                 sigma=0.035,
+                 fix_seed = False,
                  fixed_seed = 0,
-                 calculate_evidence = 1,
-                 resume=0,
-                 historic_maxent=0,
-                 recurrent = 0,
+                 calculate_evidence = True,
+                 historic_maxent=False,
+                 recurrent = False,
                  convergence_function = 4,
-                 validation_data = 1,
+                 validation_data = True,
                  verbose = 3,
-                 pretrain = 0,
+                 pretrain = False,
                  nepoch = 10,
                  line_search = 0,
                  mini_batch_fraction =1.0,
+                 resume=False,
+                 norbias=False,
+                 reset_alpha=False,
+                 reset_sigma=False,
+                 randomise_weights=0.1,
                  n_jobs=1):
     
          self.id = id
@@ -666,7 +681,11 @@ class SkyNetRegressor(SkyNet):
          self.activation = activation
          self.mini_batch_fraction  = mini_batch_fraction 
          self.line_search = line_search 
-        
+         self.norbias = norbias
+         self.reset_alpha = reset_alpha
+         self.reset_sigma = reset_sigma
+         self.randomise_weights = randomise_weights
+         
     def predict(self, X):
         """Predict regression target for X.
 

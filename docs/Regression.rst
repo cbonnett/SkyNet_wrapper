@@ -50,10 +50,10 @@ Now we perform the actual training of the neural network
 
 .. code:: python 
     
-    train_yhat,valid_yhat = sn_reg.fit(X_train,y_train,X_valid,y_valid)
+    sn_reg.fit(X_train,y_train,X_valid,y_valid)
     
-| Here ``train_yhat`` are the learned regression values for the training set.
-| Here ``valid_yhat`` are the learned regression values for the validation set.
+| Whereafter ``sn_reg.train_pred`` are the learned regression values for the training set.
+| Whereafter ``sn_reg.train_pred`` are the learned regression values for the validation set.
 
 Getting the predictions for the test
 
@@ -65,8 +65,8 @@ Compare the predictions
 
 .. code:: python
 
-   >>> print 'Mean error squared training    = ',((y_train - train_yhat) ** 2).sum()/float(len(y_train))
-   >>> print 'Mean error squared validation  = ',((y_valid - valid_yhat) ** 2).sum()/float(len(y_valid))
+   >>> print 'Mean error squared training    = ',((y_train - sn_reg.train_pred) ** 2).sum()/float(len(y_train))
+   >>> print 'Mean error squared validation  = ',((y_valid - sn_reg.valid_pred) ** 2).sum()/float(len(y_valid))
    >>> print 'Mean error squared test        = ',((y_test - test_yhat)   ** 2).sum()/float(len(y_test))
    Mean error squared training    =  10.9789472372
    Mean error squared validation  =  15.7155137255
