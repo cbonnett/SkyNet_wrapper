@@ -28,7 +28,7 @@ Contents:
    <h2>Getting Started:</h2>
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    Regression
    Classification
@@ -43,7 +43,6 @@ Contents:
    :maxdepth: 1
    
    SkyNet
-   test_SkyNet
    write_SkyNet_files
 
 
