@@ -1,11 +1,9 @@
 """
-This is a python wrapper for SkyNet neural network sofware.
-
 A python wrapper for SkyNet neural network that can de downloaded here : http://ccpforge.cse.rl.ac.uk/gf/project/skynet/
 
 SkyNet is an efficient and robust neural network training code for machine learning. It is able to train large and deep feed-forward neural networks, including autoencoders, for use in a wide range of supervised and unsupervised learning applications, such as regression, classification, density estimation, clustering and dimensionality reduction. SkyNet is implemented in C/C++ and fully parallelised using MPI.
 
-SKyNet is written by Philip Graff, Farhan Feroz, Michael P. Hobson, Anthony N. Lasenby
+SkyNet is written by Philip Graff, Farhan Feroz, Michael P. Hobson, Anthony N. Lasenby
 
 reference : http://xxx.lanl.gov/abs/1309.0790
 
@@ -64,9 +62,9 @@ class SkyNet():
           The target values (class labels in classification).
         """
         
-        ### check of feauture length is equal ###
-        n_samples_train, self.n_features_ = X_train.shape
-        n_samples_valid, valid_features   = X_valid.shape
+        ### check of feauture lengths are equal ###
+        _, self.n_features_ = X_train.shape
+        _, valid_features   = X_valid.shape
         if self.n_features_ != valid_features:
             raise ValueError("Number of features in validation set must "
                              " match the training set. Train n_features is %s and "

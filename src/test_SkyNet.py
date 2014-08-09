@@ -4,7 +4,6 @@ from sklearn.utils import shuffle
 from SkyNet import SkyNetClassifier
 from SkyNet import SkyNetRegressor
 
-
 #######################
 ### Classification ####
 #######################
