@@ -28,6 +28,8 @@ import sphinx_bootstrap_theme
 
 sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/")
 sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/src/")
+sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper")
+sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/src")
 
 # import sphinx_rtd_theme
 # html_theme = "sphinx_rtd_theme"
