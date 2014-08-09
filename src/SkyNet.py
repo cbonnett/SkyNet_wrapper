@@ -14,8 +14,24 @@ from abc import ABCMeta, abstractmethod
 import subprocess
 import write_SkyNet_files as binning
 
+# import fcntl 
+# import os 
+# import sys 
+	 
+# def make_blocking(fd): 
+#     flags = fcntl.fcntl(fd, fcntl.F_GETFL) 
+#     if flags & os.O_NONBLOCK: 
+#         fcntl.fcntl(fd, fcntl.F_SETFL, flags & ~os.NONBLOCK)
+
 __all__ = ["SkyNetClassifier","SkyNetRegressor"] #,SkyNetRegressor
 
+def parse_SkyNet_output(out):
+    '''Parse stdout from SkyNet and print summary to screen
+    '''
+    search_term = 'Network Training Complete.'
+    loc = out.find(search_term)
+    print out[loc:]
+    
 class SkyNet():
     """
     Skynet base class
@@ -100,42 +116,46 @@ class SkyNet():
         y : array-like, shape = [n_samples]
           The target values (class labels in classification).
         """
- 
-    
-        if (y_train.dtype in ['int64','int32','int16','int8']) and (y_valid.dtype in ['int64','int32','int16','int8']):
+        X_train2 = X_train
+        X_valid2 = X_valid
+        
+        y_train2 = y_train
+        y_valid2 = y_valid
+
+        if (y_train2.dtype in ['int64','int32','int16','int8']) and (y_valid2.dtype in ['int64','int32','int16','int8']):
             self.classification_network = 1
         else:
             self.classification_network = 0
         
-        n_samples_train, self.n_features_ = X_train.shape
-        n_samples_valid, valid_features   = X_valid.shape
+        n_samples_train, self.n_features_ = X_train2.shape
+        n_samples_valid, valid_features   = X_valid2.shape
         if self.n_features_ != valid_features:
-          raise ValueError("Number of features in validation set must "
-                           " match the training set. Train n_features is %s and "
-                           " valid n_features is %s "
-                           % (self.n_features_, valid_features))
+            raise ValueError("Number of features in validation set must "
+                             " match the training set. Train n_features is %s and "
+                             " valid n_features is %s "
+                             % (self.n_features_, valid_features))
 
         if self.classification_network :
-          self.n_classes_ = len(np.unique(y_train))
-          self.classes_   = np.unique(y_train)
-          classes_valid   = np.unique(y_valid)
-          if not np.array_equal(self.classes_,classes_valid):
-              raise ValueError("Training and validation must have the same "
-                               "number of classes. Train has  %s classes " 
-                               "and valid has %s classes"
-                               % (self.n_classes_), len(classes_valid))
+            self.n_classes_ = len(np.unique(y_train2))
+            self.classes_   = np.unique(y_train2)
+            classes_valid   = np.unique(y_valid2)
+            if not np.array_equal(self.classes_,classes_valid):
+                raise ValueError("Training and validation must have the same "
+                                 "number of classes. Train has  %s classes " 
+                                 "and valid has %s classes"
+                                  % (self.n_classes_), len(classes_valid))
 
         self.train_input_file  = self.input_root + self.id + 'train.txt'
         self.valid_input_file  = self.input_root + self.id + 'test.txt'
 
         if self.classification_network:
-          binning.write_SkyNet_cla_bin(self.train_input_file,X_train,y_train)
-          binning.write_SkyNet_cla_bin(self.valid_input_file,X_valid,y_valid)
-          self.SkyNet_config_file =  self.config_root + self.id + '_cla.inp'
+            binning.write_SkyNet_cla_bin(self.train_input_file,X_train2,y_train2)
+            binning.write_SkyNet_cla_bin(self.valid_input_file,X_valid2,y_valid2)
+            self.SkyNet_config_file =  self.config_root + self.id + '_cla.inp'
         else :
-          binning.write_SkyNet_reg(self.train_input_file,X_train,y_train)
-          binning.write_SkyNet_reg(self.valid_input_file,X_valid,y_valid)
-          self.SkyNet_config_file =  self.config_root + self.id + '_reg.inp'
+            binning.write_SkyNet_reg(self.train_input_file,X_train2,y_train2)
+            binning.write_SkyNet_reg(self.valid_input_file,X_valid2,y_valid2)
+            self.SkyNet_config_file =  self.config_root + self.id + '_reg.inp'
 
         output_root_file = self.output_root + self.id + '_'
         self.network_file = ''.join([output_root_file,'network.txt'])
@@ -154,16 +174,19 @@ class SkyNet():
                                         self.pretrain,self.nepoch,self.max_iter,
                                         self.line_search,self.mini_batch_fraction,
                                         )
+        ### run SkyNet and catch output ###
+        SkyNet_run_array = ''.join(['mpirun -np ',str(self.n_jobs),' SkyNet ',self.SkyNet_config_file])            
+        p = subprocess.Popen(SkyNet_run_array, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        out, err = p.communicate()
+        parse_SkyNet_output(out)
         
-        SkyNet_run_array = ''.join(['mpirun -np ',str(self.n_jobs),' SkyNet ',self.SkyNet_config_file])
-        subprocess.call(SkyNet_run_array, shell=True)
         
         if self.classification_network:
-          train_pred = np.loadtxt(output_root_file + 'train_pred.txt',usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
-          valid_pred = np.loadtxt(output_root_file + 'test_pred.txt' ,usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
+            train_pred = np.loadtxt(output_root_file + 'train_pred.txt',usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
+            valid_pred = np.loadtxt(output_root_file + 'test_pred.txt' ,usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
         else:
-          train_pred = np.loadtxt(output_root_file + 'train_pred.txt',usecols=[self.n_features_,])
-          valid_pred = np.loadtxt(output_root_file + 'test_pred.txt' ,usecols=[self.n_features_,])
+            train_pred = np.loadtxt(output_root_file + 'train_pred.txt',usecols=[self.n_features_ +1,])
+            valid_pred = np.loadtxt(output_root_file + 'test_pred.txt' ,usecols=[self.n_features_ +1,])
         
         return train_pred,valid_pred
 
@@ -718,7 +741,7 @@ class SkyNetRegressor(SkyNet):
         ###########################
         ### read in prediction ####
         ###########################
-        predictions = np.loadtxt(self.output_file)#,usecols=range(self.n_features_,(self.n_classes_) + self.n_features_))
-        #predictions = np.loadtxt(self.output_file,usecols=[self.n_features_ +1,])
+        #predictions = np.loadtxt(self.output_file)#,usecols=range(self.n_features_,(self.n_classes_) + self.n_features_))
+        predictions = np.loadtxt(self.output_file,usecols=[self.n_features_ +1,])
 
         return predictions

@@ -41,7 +41,7 @@ def write_SkyNet_config_file(SkyNet_config_file,
         Parameters
         ----------
         All :
-            see attributes of SkyNetClassfier and SkyNetRegressor
+            see attributes of :class:`SkyNetClassfier` and :class:`SkyNetRegressor`
     
     """
     ### reform activation format to SkyNet standard ###
@@ -160,14 +160,14 @@ def write_SkyNet_reg(outfile,features,reg):
     assert len(features[:,0]) == len(reg), 'Length of feature array is equal to length of reg array'
 
     outf = open(outfile,"w")
-    outf.write(str(len(feature[0,:])))
+    outf.write(str(len(features[0,:])))
     outf.write("\n")
     outf.write('1')
     outf.write("\n")
 
     for k in np.arange(len(reg)):
-        a = ','.join([str(i) for i in feature[k,:]])
-        b = str(z[k])
+        a = ','.join([str(i) for i in features[k,:]])
+        b = str(reg[k])
         outf.write(a)
         outf.write("\n")
         outf.write(b)

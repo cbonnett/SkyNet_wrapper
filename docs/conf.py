@@ -69,7 +69,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'SkyNet wrapper'
+project = u'pySkyNet'
 copyright = u'2014, Christopher Bonnett'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -135,7 +135,6 @@ html_theme_options = {
     'bootswatch_theme': "flatly",
     'navbar_sidebarrel': False,
     'bootstrap_version': "3",
-    'navbar_links': [("Tutorial", "tutorial"),],
     }
 # Add any paths that contain custom themes here, relative to this directory.
 html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
@@ -208,7 +207,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'SkyNetdoc'
+htmlhelp_basename = 'pySkyNetdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -228,7 +227,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'SkyNet.tex', u'SkyNet Documentation',
+  ('index', 'pySkyNet.tex', u'pySkyNet Documentation',
    u'Christopher Bonnett', 'manual'),
 ]
 
@@ -258,7 +257,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'SkyNet', u'SkyNet Documentation',
+    ('index', 'pySkyNet', u'pySkyNet Documentation',
      [u'Christopher Bonnett'], 1)
 ]
 
@@ -272,8 +271,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'SkyNet', u'SkyNet Documentation',
-   u'Christopher Bonnett', 'SkyNet', 'One line description of project.',
+  ('index', 'pySkyNet', u'pySkyNet Documentation',
+   u'Christopher Bonnett', 'pySkyNet', 'Python wrapper for SkyNet neural network',
    'Miscellaneous'),
 ]
 
