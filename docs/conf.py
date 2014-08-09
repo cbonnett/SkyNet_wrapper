@@ -26,10 +26,10 @@ import sphinx_bootstrap_theme
 
 # -- General configuration ------------------------------------------------
 
-# sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/")
-# sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/src/")
-# sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper")
-# sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/src")
+sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/")
+sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/src/")
+sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper")
+sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/src")
 
 sys.path.insert(0, os.path.abspath(os.path.pardir))
 
