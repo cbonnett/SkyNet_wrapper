@@ -1,8 +1,8 @@
 """
 This is a (poor man's) wrapper for SkyNet neural network sofware.
 You need to install SkyNet :
-SkyNet is an efficient and robust neural network 
-training tool for machine learning.   
+SkyNet is an efficient and robust neural network
+training tool for machine learning.
 """
 
 # Authors: CHRISTOPHER BONNETT <c.bonnett@gmail.com>
@@ -13,16 +13,20 @@ import os
 import subprocess
 import write_SkyNet_files as binning
 
-__all__ = ["SkyNetClassifier","SkyNetRegressor"] 
+__all__ = ["SkyNetClassifier", "SkyNetRegressor"]
+
 
 def test_SkyNet_install():
-    p = subprocess.Popen('SkyNet', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    p = subprocess.Popen('SkyNet', shell=True,
+                          stdout=subprocess.PIPE,
+                          stderr=subprocess.STDOUT)
     out, err = p.communicate()
     if out[:6] == 'Please':
         print 'SkyNet is installed, we did NOT check if mpi version is working'
     else:
-         raise RuntimeError("SkyNet is not installed please download"
-                            " it at http://ccpforge.cse.rl.ac.uk/gf/project/skynet/")    
+        raise RuntimeError("SkyNet is not installed please download"
+                           " it at http://ccpforge.cse.rl.ac.uk/gf/project/skynet/")
+
 
 def parse_SkyNet_output(out):
     '''Parse stdout from SkyNet and print summary to screen
@@ -30,16 +34,17 @@ def parse_SkyNet_output(out):
     search_term = 'Network Training Complete.'
     loc = out.find(search_term)
     print out[loc:]
-    
+
+
 class SkyNet():
     """
     Skynet base class
     """
-     
+    
     def __init__(self):
         
         super(SkyNetClassifier, self).__init__()
-        super(SkyNetRegressor, self).__init__()  
+        super(SkyNetRegressor, self).__init__()
           
     def fit(self,X_train,y_train,X_valid,y_valid):
         """Build a Neural Net from the training set (X_train, y_train,X_valid,y_valid).
@@ -303,42 +308,42 @@ class SkyNetClassifier(SkyNet):
                  randomise_weights=0.1,
                  n_jobs=1):
     
-         self.id = id
-         self.classification_network = classification_network
-         self.input_root = input_root
-         self.output_root = output_root
-         self.result_root = result_root
-         self.config_root = config_root
-         self.layers = layers
-         self.prior = prior
-         self.sigma = sigma
-         self.confidence_rate = confidence_rate
-         self.confidence_rate_minimum = confidence_rate_minimum
-         self.iteration_print_frequency = iteration_print_frequency
-         self.max_iter = max_iter
-         self.whitenin = whitenin
-         self.whitenout = whitenout
-         self.noise_scaling = noise_scaling
-         self.set_whitened_noise = set_whitened_noise
-         self.fix_seed = fix_seed
-         self.fixed_seed = fixed_seed
-         self.calculate_evidence = calculate_evidence
-         self.resume =resume
-         self.historic_maxent = historic_maxent
-         self.recurrent = recurrent
-         self.convergence_function = convergence_function
-         self.validation_data = validation_data
-         self.verbose = verbose
-         self.pretrain = pretrain
-         self.nepoch = nepoch
-         self.n_jobs = n_jobs
-         self.activation = activation
-         self.mini_batch_fraction  = mini_batch_fraction 
-         self.line_search = line_search
-         self.norbias = norbias
-         self.reset_alpha = reset_alpha
-         self.reset_sigma = reset_sigma
-         self.randomise_weights = randomise_weights
+        self.id = id
+        self.classification_network = classification_network
+        self.input_root = input_root
+        self.output_root = output_root
+        self.result_root = result_root
+        self.config_root = config_root
+        self.layers = layers
+        self.prior = prior
+        self.sigma = sigma
+        self.confidence_rate = confidence_rate
+        self.confidence_rate_minimum = confidence_rate_minimum
+        self.iteration_print_frequency = iteration_print_frequency
+        self.max_iter = max_iter
+        self.whitenin = whitenin
+        self.whitenout = whitenout
+        self.noise_scaling = noise_scaling
+        self.set_whitened_noise = set_whitened_noise
+        self.fix_seed = fix_seed
+        self.fixed_seed = fixed_seed
+        self.calculate_evidence = calculate_evidence
+        self.resume =resume
+        self.historic_maxent = historic_maxent
+        self.recurrent = recurrent
+        self.convergence_function = convergence_function
+        self.validation_data = validation_data
+        self.verbose = verbose
+        self.pretrain = pretrain
+        self.nepoch = nepoch
+        self.n_jobs = n_jobs
+        self.activation = activation
+        self.mini_batch_fraction  = mini_batch_fraction 
+        self.line_search = line_search
+        self.norbias = norbias
+        self.reset_alpha = reset_alpha
+        self.reset_sigma = reset_sigma
+        self.randomise_weights = randomise_weights
          
     def predict_proba(self, X):
         """Predict class probabilities for X.
@@ -670,3 +675,4 @@ class SkyNetRegressor(SkyNet):
         
 if __name__ == "__main__":
     test_SkyNet_install()
+    
