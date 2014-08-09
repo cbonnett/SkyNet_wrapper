@@ -59,7 +59,7 @@ def write_SkyNet_config_file(SkyNet_config_file,
     print >>f_class,'#output_root'
     print >>f_class,network_file[:-11]
     print >>f_class,'#classification_network'
-    print >>f_class,str(classification_network)
+    print >>f_class,str(int(classification_network))
     for layer in layers:
       print >>f_class,'#nhid'
       print >>f_class,str(layer)
@@ -91,7 +91,6 @@ def write_SkyNet_config_file(SkyNet_config_file,
     print >>f_class,str(int(calculate_evidence))
     print >>f_class,'#resume'
     print >>f_class,str(int(resume))
-    
     print >>f_class,'#norbias'
     print >>f_class,str(int(norbias))
     print >>f_class,'#reset_alpha'
@@ -100,7 +99,6 @@ def write_SkyNet_config_file(SkyNet_config_file,
     print >>f_class,str(int(reset_sigma))
     print >>f_class,'#randomise_weights'
     print >>f_class,str(randomise_weights)
-    
     print >>f_class,'#historic_maxent'
     print >>f_class,str(int(historic_maxent))
     print >>f_class,'#recurrent'

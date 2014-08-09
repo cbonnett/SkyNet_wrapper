@@ -10,11 +10,19 @@ training tool for machine learning.
 
 import numpy as np
 import os
-from abc import ABCMeta, abstractmethod
 import subprocess
 import write_SkyNet_files as binning
 
 __all__ = ["SkyNetClassifier","SkyNetRegressor"] 
+
+def test_SkyNet_install():
+    p = subprocess.Popen('SkyNet', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    out, err = p.communicate()
+    if out[:6] == 'Please':
+        print 'SkyNet is installed, we did NOT check if mpi version is working'
+    else:
+         raise RuntimeError("SkyNet is not installed please download"
+                            " it at http://ccpforge.cse.rl.ac.uk/gf/project/skynet/")    
 
 def parse_SkyNet_output(out):
     '''Parse stdout from SkyNet and print summary to screen
@@ -27,82 +35,11 @@ class SkyNet():
     """
     Skynet base class
     """
-    
-    __metaclass__ = ABCMeta
-      
-    @abstractmethod
-    def __init__(self,
-                 id,
-                 input_root  ='/Users/Christopher_old/ice/data/SkyNet/train_valid/',
-                 output_root ='/Users/Christopher_old/ice/data/SkyNet/network/',
-                 result_root = '/Users/Christopher_old/ice/data/SkyNet/results/',
-                 config_root= '/Users/Christopher_old/ice/data/SkyNet/config_files/',
-                 layers=[10,10,10],
-                 activation = [2,2,2,0],
-                 prior=True,
-                 confidence_rate=0.3,
-                 confidence_rate_minimum=0.02,
-                 iteration_print_frequency=50,
-                 max_iter=2000,
-                 whitenin = True,
-                 whitenout = True,
-                 noise_scaling=0,
-                 set_whitened_noise = False,
-                 sigma=0.035,
-                 fix_seed = False,
-                 fixed_seed = 0,
-                 calculate_evidence = True,
-                 historic_maxent=False,
-                 recurrent = False,
-                 convergence_function = 4,
-                 validation_data = True,
-                 verbose = 3,
-                 pretrain = False,
-                 nepoch = 10,
-                 line_search = 0,
-                 mini_batch_fraction =1.0,
-                 resume=False,
-                 norbias=False,
-                 reset_alpha=False,
-                 reset_sigma=False,
-                 randomise_weights=0.1,
-                 n_jobs=1):
-
-        self.id = id
-        self.input_root = input_root
-        self.output_root = output_root
-        self.result_root = result_root
-        self.config_root = config_root
-        self.layers = layers
-        self.prior = prior
-        self.sigma = sigma
-        self.confidence_rate = confidence_rate
-        self.confidence_rate_minimum = confidence_rate_minimum
-        self.iteration_print_frequency = iteration_print_frequency
-        self.max_iter = max_iter
-        self.whitenin = whitenin
-        self.whitenout = whitenout
-        self.noise_scaling = noise_scaling
-        self.set_whitened_noise = set_whitened_noise
-        self.fix_seed = fix_seed
-        self.fixed_seed = fixed_seed
-        self.calculate_evidence = calculate_evidence
-        self.resume =resume
-        self.historic_maxent = historic_maxent
-        self.recurrent = recurrent
-        self.convergence_function = convergence_function
-        self.validation_data = validation_data
-        self.verbose = verbose
-        self.pretrain = pretrain
-        self.nepoch = nepoch
-        self.n_jobs = n_jobs
-        self.activation = activation
-        self.mini_batch_fraction  = mini_batch_fraction 
-        self.line_search = line_search
-        self.norbias = norbias
-        self.reset_alpha = reset_alpha
-        self.reset_sigma = reset_sigma
-        self.randomise_weights = randomise_weights
+     
+    def __init__(self):
+        
+        super(SkyNetClassifier, self).__init__()
+        super(SkyNetRegressor, self).__init__()  
           
     def fit(self,X_train,y_train,X_valid,y_valid):
         """Build a Neural Net from the training set (X_train, y_train,X_valid,y_valid).
@@ -115,12 +52,8 @@ class SkyNet():
         y : array-like, shape = [n_samples]
           The target values (class labels in classification).
         """
-
-        if (y_train.dtype in ['int64','int32','int16','int8']) and (y_valid.dtype in ['int64','int32','int16','int8']):
-            self.classification_network = 1
-        else:
-            self.classification_network = 0
         
+        ### check of feauture length is equal ###
         n_samples_train, self.n_features_ = X_train.shape
         n_samples_valid, valid_features   = X_valid.shape
         if self.n_features_ != valid_features:
@@ -129,6 +62,7 @@ class SkyNet():
                              " valid n_features is %s "
                              % (self.n_features_, valid_features))
 
+        ### if class=True : check if  number classes is equal ###
         if self.classification_network :
             self.n_classes_ = len(np.unique(y_train))
             self.classes_   = np.unique(y_train)
@@ -139,9 +73,11 @@ class SkyNet():
                                  "and valid has %s classes"
                                   % (self.n_classes_), len(classes_valid))
 
+        ### training/validation file names to be written ###
         self.train_input_file  = self.input_root + self.id + 'train.txt'
         self.valid_input_file  = self.input_root + self.id + 'test.txt'
 
+        ### write training/validation files ###
         if self.classification_network:
             binning.write_SkyNet_cla_bin(self.train_input_file,X_train,y_train)
             binning.write_SkyNet_cla_bin(self.valid_input_file,X_valid,y_valid)
@@ -154,6 +90,7 @@ class SkyNet():
         output_root_file = self.output_root + self.id + '_'
         self.network_file = ''.join([output_root_file,'network.txt'])
 
+        ### write config file ###
         binning.write_SkyNet_config_file(self.SkyNet_config_file,self.train_input_file,
                                         self.network_file,self.classification_network,
                                         self.layers,self.activation,self.prior,self.whitenin,
@@ -170,6 +107,7 @@ class SkyNet():
                                         self.norbias,self.reset_alpha,
                                         self.reset_sigma,self.randomise_weights
                                         )
+       
         ### run SkyNet and catch output ###
         SkyNet_run_array = ''.join(['mpirun -np ',str(self.n_jobs),' SkyNet ',self.SkyNet_config_file])            
         p = subprocess.Popen(SkyNet_run_array, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -327,10 +265,9 @@ class SkyNetClassifier(SkyNet):
     SkyNetRegressor
     """
  
-        
     def __init__(self,
                  id,
-                 classification_network = 1,
+                 classification_network = True,
                  input_root  ='/Users/Christopher_old/ice/data/SkyNet/train_valid/',
                  output_root ='/Users/Christopher_old/ice/data/SkyNet/network/',
                  result_root = '/Users/Christopher_old/ice/data/SkyNet/results/',
@@ -465,7 +402,8 @@ class SkyNetClassifier(SkyNet):
         ############################
         
         SkyNet_predictions_string = ''.join(['CalPred',' 0 1 0 ',self.network_file,' ',self.train_input_file,' ',self.pred_input_file,' ',self.output_file,' 0 0 0'])
-        subprocess.call(SkyNet_predictions_string, shell=True)
+        p = subprocess.Popen(SkyNet_predictions_string, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        out, err = p.communicate()
 
         ###########################
         ### read in prediction ####
@@ -613,7 +551,7 @@ class SkyNetRegressor(SkyNet):
     
     def __init__(self,
                  id,
-                 classification_network = 0,
+                 classification_network = False,
                  input_root  ='/Users/Christopher_old/ice/data/SkyNet/train_valid/',
                  output_root ='/Users/Christopher_old/ice/data/SkyNet/network/',
                  result_root = '/Users/Christopher_old/ice/data/SkyNet/results/',
@@ -747,11 +685,15 @@ class SkyNetRegressor(SkyNet):
         ############################
         ### calulate predictions ###
         ############################
-        subprocess.call(SkyNet_predictions_string, shell=True)
+        p = subprocess.Popen(SkyNet_predictions_string, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        out, err = p.communicate()
+        
         ###########################
         ### read in prediction ####
         ###########################
-        #predictions = np.loadtxt(self.output_file)#,usecols=range(self.n_features_,(self.n_classes_) + self.n_features_))
         predictions = np.loadtxt(self.output_file,usecols=[self.n_features_ +1,])
 
         return predictions
+        
+if __name__ == "__main__":
+    test_SkyNet_install()
