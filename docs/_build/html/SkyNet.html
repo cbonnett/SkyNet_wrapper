@@ -30,7 +30,6 @@
     <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="pySkyNet  documentation" href="index.html" />
-    <link rel="next" title="test_SkyNet module" href="test_SkyNet.html" />
     <link rel="prev" title="An introduction to classification with pySkyNet" href="Classification.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -88,7 +87,9 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">SkyNet module</a></li>
+<li><a class="reference internal" href="#">SkyNet module</a><ul>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -349,6 +350,21 @@ astronomy <a class="reference external" href="http://arxiv.org/abs/1309.0790">ht
 <td>string</td>
 <td>Filename of SkyNet network file.
 This file contains the trained weights:</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fit</span></tt>(X_train,&nbsp;y_train,&nbsp;X_valid,&nbsp;y_valid)</td>
+<td>Build a Neural Net from the training set (X_train, y_train,X_valid,y_valid).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SkyNet.SkyNetClassifier.predict_proba" title="SkyNet.SkyNetClassifier.predict_proba"><tt class="xref py py-obj docutils literal"><span class="pre">predict_proba</span></tt></a>(X)</td>
+<td>Predict class probabilities for X.</td>
 </tr>
 </tbody>
 </table>
@@ -620,6 +636,21 @@ astronomy <a class="reference external" href="http://arxiv.org/abs/1309.0790">ht
 <td>string</td>
 <td>Filename of SkyNet network file.
 This file contains the trained weights:</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fit</span></tt>(X_train,&nbsp;y_train,&nbsp;X_valid,&nbsp;y_valid)</td>
+<td>Build a Neural Net from the training set (X_train, y_train,X_valid,y_valid).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SkyNet.SkyNetRegressor.predict" title="SkyNet.SkyNetRegressor.predict"><tt class="xref py py-obj docutils literal"><span class="pre">predict</span></tt></a>(X)</td>
+<td>Predict regression target for X.</td>
 </tr>
 </tbody>
 </table>

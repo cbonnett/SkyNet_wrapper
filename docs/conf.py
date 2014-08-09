@@ -26,7 +26,8 @@ import sphinx_bootstrap_theme
 
 # -- General configuration ------------------------------------------------
 
-sys.path.insert(0,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/")
+sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/")
+sys.path.insert(1,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/src/")
 
 # import sphinx_rtd_theme
 # html_theme = "sphinx_rtd_theme"
@@ -50,7 +51,7 @@ extensions = ['sphinx.ext.autodoc',
               ]
 
 autosummary_generate = True
-numpydoc_show_class_members = False
+numpydoc_show_class_members = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
