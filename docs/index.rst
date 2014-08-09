@@ -27,7 +27,7 @@ Contents:
    <h2>Getting Started:</h2>
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    Regression
    Classification
