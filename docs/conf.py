@@ -22,11 +22,11 @@ import sphinx_bootstrap_theme
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0,'anaconda/lib/python2.7/site-packages/sphinx_bootstrap_theme/')
+# sys.path.insert(0,'anaconda/lib/python2.7/site-packages/sphinx_bootstrap_theme/')
 
 # -- General configuration ------------------------------------------------
 
-sys.path.insert(0,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/src")
+sys.path.insert(0,"/Users/Christopher_old/ice/github_code/SkyNet_wrapper/src/")
 
 # import sphinx_rtd_theme
 # html_theme = "sphinx_rtd_theme"
