@@ -28,7 +28,7 @@ import write_SkyNet_files as binning
 
 __all__ = ["SkyNetClassifier", "SkyNetRegressor"]
 
-SKYNEY_PATH =  os.environ["SKYNETPATH"]
+SKYNET_PATH =  os.environ["SKYNETPATH"]
 
 # def test_SkyNet_install():
 #     p = subprocess.Popen('SkyNet', shell=True,
@@ -289,10 +289,10 @@ class SkyNetClassifier(SkyNet):
     def __init__(self,
                  id,
                  classification_network = True,
-                 input_root  = ''.join([SkyNet_path,'train_valid/']),
-                 output_root = ''.join([SkyNet_path,'network/']),
-                 result_root = ''.join([SkyNet_path,'predictions/']),
-                 config_root = ''.join([SkyNet_path,'config_files/']),
+                 input_root  = ''.join([SKYNET_PATH,'train_valid/']),
+                 output_root = ''.join([SKYNET_PATH,'network/']),
+                 result_root = ''.join([SKYNET_PATH,'predictions/']),
+                 config_root = ''.join([SKYNET_PATH,'config_files/']),
                  layers = [10,10,10],
                  activation = [2,2,2,0],
                  prior = True,
@@ -559,10 +559,10 @@ class SkyNetRegressor(SkyNet):
     def __init__(self,
                  id,
                  classification_network = False,
-                 input_root  = ''.join([SkyNet_path,'train_valid/']),
-                 output_root = ''.join([SkyNet_path,'network/']),
-                 result_root = ''.join([SkyNet_path,'predictions/']),
-                 config_root = ''.join([SkyNet_path,'config_files/']),
+                 input_root  = ''.join([SKYNET_PATH,'train_valid/']),
+                 output_root = ''.join([SKYNET_PATH,'network/']),
+                 result_root = ''.join([SKYNET_PATH,'predictions/']),
+                 config_root = ''.join([SKYNET_PATH,'config_files/']),
                  layers=[10,10,10],
                  activation = [2,2,2,0],
                  prior=True,
