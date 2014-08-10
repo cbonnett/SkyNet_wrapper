@@ -8,7 +8,6 @@ SkyNet is written by Philip Graff, Farhan Feroz, Michael P. Hobson, Anthony N. L
 reference : http://xxx.lanl.gov/abs/1309.0790
 
 """
-
 # Authors: CHRISTOPHER BONNETT <c.bonnett@gmail.com>
 # Licence: BSD 3 clause
 
@@ -19,18 +18,18 @@ import write_SkyNet_files as binning
 
 __all__ = ["SkyNetClassifier", "SkyNetRegressor"]
 
+SKYNEY_PATH =  os.environ["SKYNETPATH"]
 
-def test_SkyNet_install():
-    p = subprocess.Popen('SkyNet', shell=True,
-                          stdout=subprocess.PIPE,
-                          stderr=subprocess.STDOUT)
-    out, err = p.communicate()
-    if out[:6] == 'Please':
-        print 'SkyNet is installed, we did NOT check if mpi version is working'
-    else:
-        raise RuntimeError("SkyNet is not installed please download"
-                           " it at http://ccpforge.cse.rl.ac.uk/gf/project/skynet/")
-
+# def test_SkyNet_install():
+#     p = subprocess.Popen('SkyNet', shell=True,
+#                           stdout=subprocess.PIPE,
+#                           stderr=subprocess.STDOUT)
+#     out, err = p.communicate()
+#     if out[:6] == 'Please':
+#         print 'SkyNet is installed, we did NOT check if mpi version is working'
+#     else:
+#         raise RuntimeError("SkyNet is not installed please download"
+#                            " it at http://ccpforge.cse.rl.ac.uk/gf/project/skynet/")
 
 def parse_SkyNet_output(out):
     '''Parse stdout from SkyNet and print summary to screen
@@ -51,7 +50,7 @@ class SkyNet():
         super(SkyNetRegressor, self).__init__()
           
     def fit(self,X_train,y_train,X_valid,y_valid):
-        """Build a Neural Net from the training set (X_train, y_train,X_valid,y_valid).
+        """Train a Neural Net using the training and validation data.
         
         Parameters
         ----------
@@ -124,12 +123,15 @@ class SkyNet():
         parse_SkyNet_output(out)
         
         ### read the results from the files ###
+        self.train_pred_file = output_root_file + 'train_pred.txt'
+        self.valid_pred_file = output_root_file + 'test_pred.txt'
+        
         if self.classification_network:
-            self.train_pred = np.loadtxt(output_root_file + 'train_pred.txt',usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
-            self.valid_pred = np.loadtxt(output_root_file + 'test_pred.txt' ,usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
+            self.train_pred = np.loadtxt(self.train_pred_file,usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
+            self.valid_pred = np.loadtxt(self.valid_pred_file,usecols=range(self.n_classes_ + self.n_features_,(2 * self.n_classes_) + self.n_features_))
         else:
-            self.train_pred = np.loadtxt(output_root_file + 'train_pred.txt',usecols=[self.n_features_ +1,])
-            self.valid_pred = np.loadtxt(output_root_file + 'test_pred.txt' ,usecols=[self.n_features_ +1,])
+            self.train_pred = np.loadtxt(self.train_pred_file,usecols=[self.n_features_ +1,])
+            self.valid_pred = np.loadtxt(self.train_pred_file,usecols=[self.n_features_ +1,])
 
 # =============================================================================
 # Public estimators
@@ -277,26 +279,26 @@ class SkyNetClassifier(SkyNet):
     def __init__(self,
                  id,
                  classification_network = True,
-                 input_root  ='/Users/Christopher_old/ice/data/SkyNet/train_valid/',
-                 output_root ='/Users/Christopher_old/ice/data/SkyNet/network/',
-                 result_root = '/Users/Christopher_old/ice/data/SkyNet/results/',
-                 config_root= '/Users/Christopher_old/ice/data/SkyNet/config_files/',
-                 layers=[10,10,10],
+                 input_root  = ''.join([SkyNet_path,'train_valid/']),
+                 output_root = ''.join([SkyNet_path,'network/']),
+                 result_root = ''.join([SkyNet_path,'results/']),
+                 config_root = ''.join([SkyNet_path,'config_files/']),
+                 layers = [10,10,10],
                  activation = [2,2,2,0],
-                 prior=True,
-                 confidence_rate=0.3,
-                 confidence_rate_minimum=0.02,
-                 iteration_print_frequency=50,
-                 max_iter=2000,
+                 prior = True,
+                 confidence_rate = 0.3,
+                 confidence_rate_minimum = 0.02,
+                 iteration_print_frequency = 50,
+                 max_iter = 2000,
                  whitenin = True,
                  whitenout = True,
-                 noise_scaling=0,
+                 noise_scaling = 0,
                  set_whitened_noise = False,
-                 sigma=0.035,
+                 sigma = 0.035,
                  fix_seed = False,
                  fixed_seed = 0,
                  calculate_evidence = True,
-                 historic_maxent=False,
+                 historic_maxent = False,
                  recurrent = False,
                  convergence_function = 4,
                  validation_data = True,
@@ -304,13 +306,13 @@ class SkyNetClassifier(SkyNet):
                  pretrain = False,
                  nepoch = 10,
                  line_search = 0,
-                 mini_batch_fraction =1.0,
-                 resume=False,
-                 norbias=False,
-                 reset_alpha=False,
-                 reset_sigma=False,
-                 randomise_weights=0.1,
-                 n_jobs=1):
+                 mini_batch_fraction = 1.0,
+                 resume = False,
+                 norbias = False,
+                 reset_alpha = False,
+                 reset_sigma = False,
+                 randomise_weights = 0.1,
+                 n_jobs = 1):
     
         self.id = id
         self.classification_network = classification_network
@@ -332,7 +334,7 @@ class SkyNetClassifier(SkyNet):
         self.fix_seed = fix_seed
         self.fixed_seed = fixed_seed
         self.calculate_evidence = calculate_evidence
-        self.resume =resume
+        self.resume = resume
         self.historic_maxent = historic_maxent
         self.recurrent = recurrent
         self.convergence_function = convergence_function
@@ -386,8 +388,8 @@ class SkyNetClassifier(SkyNet):
                              "Prediction set has %s features "
                              % (self.n_features_, pred_n_features_))
 
-        dummy_classes = np.random.randint(0,high=self.n_classes_,size=n_samples_pred)
-        binning.write_SkyNet_cla_bin(self.pred_input_file,X,dummy_classes)
+        dummy_classes = np.random.randint(0, high = self.n_classes_,size = n_samples_pred)
+        binning.write_SkyNet_cla_bin(self.pred_input_file, X, dummy_classes)
         
         ### check file exitence ###
         if not os.path.isfile(self.network_file):
@@ -398,7 +400,7 @@ class SkyNetClassifier(SkyNet):
             raise IOError("Prediction file %s not found " % (self.pred_input_file))
 
         ### calulate predictions ###
-        SkyNet_predictions_string = ''.join(['CalPred',' 0 1 0 ',self.network_file,' ',self.train_input_file,' ',self.pred_input_file,' ',self.output_file,' 0 0 0'])
+        SkyNet_predictions_string = ''.join(['CalPred',' 0 1 0 ', self.network_file, ' ', self.train_input_file, ' ', self.pred_input_file, ' ',self.output_file,' 0 0 0'])
         p = subprocess.Popen(SkyNet_predictions_string, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         out, err = p.communicate()
         
@@ -547,10 +549,10 @@ class SkyNetRegressor(SkyNet):
     def __init__(self,
                  id,
                  classification_network = False,
-                 input_root  ='/Users/Christopher_old/ice/data/SkyNet/train_valid/',
-                 output_root ='/Users/Christopher_old/ice/data/SkyNet/network/',
-                 result_root = '/Users/Christopher_old/ice/data/SkyNet/results/',
-                 config_root= '/Users/Christopher_old/ice/data/SkyNet/config_files/',
+                 input_root  = ''.join([SkyNet_path,'train_valid/']),
+                 output_root = ''.join([SkyNet_path,'network/']),
+                 result_root = ''.join([SkyNet_path,'results/']),
+                 config_root = ''.join([SkyNet_path,'config_files/']),
                  layers=[10,10,10],
                  activation = [2,2,2,0],
                  prior=True,
@@ -582,43 +584,43 @@ class SkyNetRegressor(SkyNet):
                  randomise_weights=0.1,
                  n_jobs=1):
     
-         self.id = id
-         self.classification_network = classification_network
-         self.input_root = input_root
-         self.output_root = output_root
-         self.result_root = result_root
-         self.config_root = config_root
-         self.layers = layers
-         self.prior = prior
-         self.sigma = sigma
-         self.confidence_rate = confidence_rate
-         self.confidence_rate_minimum = confidence_rate_minimum
-         self.iteration_print_frequency = iteration_print_frequency
-         self.max_iter = max_iter
-         self.whitenin = whitenin
-         self.whitenout = whitenout
-         self.noise_scaling = noise_scaling
-         self.set_whitened_noise = set_whitened_noise
-         self.fix_seed = fix_seed
-         self.fixed_seed = fixed_seed
-         self.calculate_evidence = calculate_evidence
-         self.resume =resume
-         self.historic_maxent = historic_maxent
-         self.recurrent = recurrent
-         self.convergence_function = convergence_function
-         self.validation_data = validation_data
-         self.verbose = verbose
-         self.pretrain = pretrain
-         self.nepoch = nepoch
-         self.n_jobs = n_jobs
-         self.activation = activation
-         self.mini_batch_fraction  = mini_batch_fraction 
-         self.line_search = line_search 
-         self.norbias = norbias
-         self.reset_alpha = reset_alpha
-         self.reset_sigma = reset_sigma
-         self.randomise_weights = randomise_weights
-         
+        self.id = id
+        self.classification_network = classification_network
+        self.input_root = input_root
+        self.output_root = output_root
+        self.result_root = result_root
+        self.config_root = config_root
+        self.layers = layers
+        self.prior = prior
+        self.sigma = sigma
+        self.confidence_rate = confidence_rate
+        self.confidence_rate_minimum = confidence_rate_minimum
+        self.iteration_print_frequency = iteration_print_frequency
+        self.max_iter = max_iter
+        self.whitenin = whitenin
+        self.whitenout = whitenout
+        self.noise_scaling = noise_scaling
+        self.set_whitened_noise = set_whitened_noise
+        self.fix_seed = fix_seed
+        self.fixed_seed = fixed_seed
+        self.calculate_evidence = calculate_evidence
+        self.resume =resume
+        self.historic_maxent = historic_maxent
+        self.recurrent = recurrent
+        self.convergence_function = convergence_function
+        self.validation_data = validation_data
+        self.verbose = verbose
+        self.pretrain = pretrain
+        self.nepoch = nepoch
+        self.n_jobs = n_jobs
+        self.activation = activation
+        self.mini_batch_fraction  = mini_batch_fraction
+        self.line_search = line_search 
+        self.norbias = norbias
+        self.reset_alpha = reset_alpha
+        self.reset_sigma = reset_sigma
+        self.randomise_weights = randomise_weights
+
     def predict(self, X):
         """Predict regression target for X.
 
@@ -642,7 +644,7 @@ class SkyNetRegressor(SkyNet):
         y: array of shape = [n_samples]
             The predicted values.
         """   
-        
+
         ### set file names  ###
         self.pred_input_file = self.input_root  + self.id + '_to_predict.txt'
         self.output_file     = self.result_root + self.id + '_predictions.txt'
@@ -656,8 +658,9 @@ class SkyNetRegressor(SkyNet):
                              "Prediction set has %s features "
                              % (self.n_features_, pred_n_features_))
 
+        ### write feature file ###
         dummy_targets = np.zeros(n_samples_pred)
-        binning.write_SkyNet_cla_bin(self.pred_input_file,X,dummy_targets)
+        binning.write_SkyNet_reg(self.pred_input_file,X,dummy_targets)
 
         ### check file exitence ###
         if not os.path.isfile(self.network_file):
@@ -676,7 +679,5 @@ class SkyNetRegressor(SkyNet):
         predictions = np.loadtxt(self.output_file,usecols=[self.n_features_ +1,])
 
         return predictions
-        
-if __name__ == "__main__":
-    test_SkyNet_install()
+
     
