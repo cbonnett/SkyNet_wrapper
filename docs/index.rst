@@ -1,9 +1,6 @@
-
 =============================================
 Welcome to the pySkyNet documentation
 =============================================
-
-.. _`pySkyNet`: https://github.com/cbonnett/SkyNet_wrapper
 
 | SkyNet is an efficient and robust neural network training code for machine learning. It is able to train large and deep feed-forward neural networks, including autoencoders, for use in a wide range of supervised and unsupervised learning applications, such as regression, classification, density estimation, clustering and dimensionality reduction. SkyNet is implemented in C/C++ and fully parallelised using MPI.
 
@@ -29,6 +26,7 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
+   install
    Regression
    Classification
    files
@@ -45,6 +43,4 @@ Contents:
    SkyNet
    write_SkyNet_files
    test_SkyNet
-
-
 

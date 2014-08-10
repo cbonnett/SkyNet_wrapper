@@ -103,8 +103,9 @@ For Classification it is as follows:
         <th class="tg-031e">prob_class_n</th>
       </tr>
     </table>
- 
+
 |
+
 If the true targets/classes are not know these values are meaningless but will still be printed to file.
 **pySkyNet** only returns the prediction values.
 The `true_class_[n]` is printed in one-hot encoding, thus all values are zero expect for the correct class.

@@ -1,4 +1,6 @@
 .. _install:
 
-Installing pySkyNet 
+Installing pySkyNet
 ===================
+
+Installing
