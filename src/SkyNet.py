@@ -28,11 +28,10 @@ import write_SkyNet_files as binning
 
 __all__ = ["SkyNetClassifier", "SkyNetRegressor"]
 
-
 try:
     SKYNET_PATH =  os.environ["SKYNETPATH"]
 except:
-    SKYNET_PATH == '.'
+    SKYNET_PATH = '.'
     
 # def test_SkyNet_install():
 #     p = subprocess.Popen('SkyNet', shell=True,
@@ -84,7 +83,7 @@ class SkyNet():
                              " valid n_features is %s "
                              % (self.n_features_, valid_features))
 
-        ### if class=True : check if  number classes is equal ###
+        ### if class=True : check if  number classes are equal ###
         if self.classification_network :
             self.n_classes_ = len(np.unique(y_train))
             self.classes_   = np.unique(y_train)
