@@ -28,8 +28,12 @@ import write_SkyNet_files as binning
 
 __all__ = ["SkyNetClassifier", "SkyNetRegressor"]
 
-SKYNET_PATH =  os.environ["SKYNETPATH"]
 
+try:
+    SKYNET_PATH =  os.environ["SKYNETPATH"]
+except:
+    SKYNET_PATH == '.'
+    
 # def test_SkyNet_install():
 #     p = subprocess.Popen('SkyNet', shell=True,
 #                           stdout=subprocess.PIPE,
