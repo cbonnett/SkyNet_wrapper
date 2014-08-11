@@ -2,14 +2,14 @@
 Welcome to pySkyNet
 ===================
 
-| SkyNet is an efficient and robust neural network training code for machine learning. It is able to train large and deep feed-forward neural networks, including autoencoders, for use in a wide range of supervised and unsupervised learning applications, such as regression, classification, density estimation, clustering and dimensionality reduction. SkyNet is implemented in C/C++ and fully parallelised using MPI.
+| **SkyNet** is an efficient and robust neural network training code for machine learning. It is able to train large and deep feed-forward neural networks, including autoencoders, for use in a wide range of supervised and unsupervised learning applications, such as regression, classification, density estimation, clustering and dimensionality reduction. SkyNet is implemented in C/C++ and fully parallelised using MPI. Currently autoencoders are not implemented in **pySkyNet** 
 
 | **pySkyNet** makes system calls to SkyNet and emulates the `fit` and `predict` user interface of `sklearn <http://scikit-learn.org/stable/>`_.
 | `Here is pySkyNet github page <https://github.com/cbonnett/SkyNet_wrapper>`_. 
 
 .. note::
 
-   | You need to have the mpi version of SkyNet installed for pySkyNet to work!
+   | You need to have the mpi version of **SkyNet** installed for **pySkyNet** to work!
    | Get it here http://ccpforge.cse.rl.ac.uk/gf/project/skynet/
 
 Contents:
