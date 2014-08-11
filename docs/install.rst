@@ -1,15 +1,15 @@
 Installing pySkyNet
 ===================
 
-| As **pySkyNet** is a poor man's wrapper of SkyNet it performs system calls to SkyNet.
+| As **pySkyNet** is a poor man's wrapper of SkyNet it performs system calls to **SkyNet**.
 | **SkyNet** can be installed from here: http://ccpforge.cse.rl.ac.uk/gf/project/skynet/
-| **pySkyNet** takes care of writing the files needed in the correct format and reading in the predictions from the files once printed by SkyNet and returning them to the user.
+| **pySkyNet** takes care of writing the files needed in the correct format and reading in the predictions from the files once printed by **SkyNet** and returning them to the user.
 
 This means that
 the only configuration that is needed is setting the folders
 where **pySkNet** and **SkyNet** will read and write.
 
-First clone the pySkyNet repository:
+First clone the **pySkyNet** repository:
 
 .. code ::
 
@@ -40,14 +40,13 @@ Once the $SKYNETPATH is set, you run:
 This will create 4 subfolders in $SKYNETPATH:
  - $SKYNETPATH/train_valid 
     This folder will contain the training and validation files.
-    after training has completed.
  - $SKYNETPATH/config_files
-    This folder contains the configuration files used SkyNet
+    This folder contains the configuration files used  by **SkyNet**
  - $SKYNETPATH/network
     This folder contains the learned weight files.
     This folder will also contain the predictions of the training and validation samples
  - $SKYNETPATH/predictions
-    In this folder all predictions are printed.
+    In this folder all the predictions are printed.
     
 .. note::
 

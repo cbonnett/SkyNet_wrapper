@@ -96,8 +96,8 @@ class SkyNet():
                                   % (self.n_classes_), len(classes_valid))
 
         ### training/validation file names to be written ###
-        self.train_input_file = ''.join([self.input_root, self.id, 'train.txt'])
-        self.valid_input_file = ''.join([self.input_root, self.id, 'test.txt'])
+        self.train_input_file = ''.join([self.input_root, self.id, '_train.txt'])
+        self.valid_input_file = ''.join([self.input_root, self.id, '_test.txt'])
 
         ### write training/validation files ###
         if self.classification_network:
@@ -675,7 +675,7 @@ class SkyNetRegressor(SkyNet):
 
         ### set file names  ###
         self.pred_input_file = ''.join([self.input_root, self.id, '_to_predict.txt'])
-        self.output_file = ''.join([self.input_root, self.id, '_predictions.txt'])
+        self.output_file = ''.join([self.result_root, self.id, '_predictions.txt'])
 
         #####  check feature lenght  ###
         n_samples_pred, pred_n_features_ = X.shape

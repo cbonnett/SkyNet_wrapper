@@ -16,16 +16,16 @@ Regression : Predicting a continuous value for a new example.
 
     # X are the features and y are the targets
     # shuffle returns a random permutation 
-    X,y = shuffle(load_boston().data,load_boston().target)
+    X,y = shuffle(load_boston().data, load_boston().target)
     
 We split the data into train,valid and test.
 The neural net will adjust the weights solely based
 on the train data. It will monitor the error on the 
-valid data and stop the training once the error 
-on the validation data fails to diminish
-then after that we get the prediction for the
-test data 
-     
+validation data and stop the training once the error 
+on the validation data fails to diminish.
+After that we calculate the predictions for the
+test data using the trained neural network.
+
 .. code:: python
 
     X_train = X[0:200]
@@ -37,14 +37,14 @@ test data
     X_test =X[400:]
     y_test =y[400:]
     
-We instantiate the neural network with 3 hidden layers with each 10 nodes ``[10,10,10]`` on the training data.
+We instantiate the neural network with 3 hidden layers with each 10 nodes ``[10,10,10]``.
 With linear rectified units as activation functions for the hidden layers and linear activation for the
 outputlayer ``[3,3,3,0]`` on a single core ``n_jobs=1``.
-We use the string ``identification`` as id.
+We use the string ``'identification'`` as id.
 
 .. code:: python
     
-    sn_reg = SkyNetRegressor(id='identification', n_jobs=1, activation=[3,3,3,0], layers=[10,10,10], max_iter=100)
+    sn_reg = SkyNetRegressor(id = 'identification', n_jobs = 1, activation = [3,3,3,0], layers = [10,10,10], max_iter = 200)
     
 Now we perform the actual training of the neural network
 
@@ -93,7 +93,7 @@ All code combined
    X_test =X[400:]
    y_test =y[400:]
    
-   sn_reg = SkyNetRegressor(id='identification', n_jobs=1, activation=[3,3,3,0], layers=[10,10,10], max_iter=100)
+   sn_reg = SkyNetRegressor(id='identification', n_jobs=1, activation=[3,3,3,0], layers=[10,10,10], max_iter=200)
    
    sn_reg.fit(X_train,y_train,X_valid,y_valid)
    

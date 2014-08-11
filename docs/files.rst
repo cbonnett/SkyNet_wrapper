@@ -3,9 +3,11 @@
 Which files are written to disk ?
 =================================
 
-**pySkyNet** makes a system call to SkyNet, before it does so it writes
-away files that SkyNet uses. Once the neural net is trained pySkyNet
+**pySkyNet** makes a system call to **SkyNet**, before it does so it writes
+away files that **SkyNet** uses. Once the neural net is trained **pySkyNet**
 reads in the results and returns them to the user. 
+
+| See examples below.
 
 Files written before training:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -14,13 +16,13 @@ Files written before training:
 
 .. code:: python
     
-    self.train_input_file  = ''.join([self.input_root, self.id, 'train.txt'])
+    self.train_input_file  = ''.join([self.input_root, self.id, '_train.txt'])
 
 **The features and targets for validation:**
 
 .. code:: python
     
-    self.valid_input_file  = ''.join([self.input_root, self.id,'test.txt'])
+    self.valid_input_file  = ''.join([self.input_root, self.id,'_test.txt'])
 
 **The SkyNet configuration file:**
 
@@ -38,13 +40,13 @@ Once training has completed SkyNet writes the following files to disk:
 
 .. code:: python
     
-    self.train_pred_file = ''.join([output_root_file, 'train_pred.txt'])
+    self.train_pred_file = ''.join([output_root_file, '_train_pred.txt'])
 
 **Validation predictions:**
 
 .. code:: python
     
-    self.valid_pred_file = ''.join([output_root_file, 'test_pred.txt'])
+    self.valid_pred_file = ''.join([output_root_file, '_test_pred.txt'])
         
 **Learned weights file:**
 
@@ -121,4 +123,34 @@ If the true targets/classes are not know the 'true' values are meaningless, but 
 **pySkyNet** only returns the prediction values.
 The `true_class_[n]` is printed in one-hot encoding, thus all values are zero expect for the correct class.
 The sum of all values of prob_class_[n] is equal to 1.
+
+Examples:
+~~~~~~~~~
+
+.. code::
+
+    sn_reg = SkyNetRegressor(id='identification', n_jobs=1, activation=[3,3,3,0], layers=[10,10,10], max_iter=200)
+    sn_reg.fit(X_train,y_train,X_valid,y_valid)
+    test_yhat = sn_reg.predict(X_test)
+
+After which:
+
+.. code::
+
+    >>> print sn_reg.train_input_file
+    $SKYNETPATH/train_valid/identification_train.txt
+    >>> print sn_reg.test_input_file
+    $SKYNETPATH/train_valid/identification_test.txt
+    >>> print sn_reg.SkyNet_config_file
+    $SKYNETPATH/config_files/identification_reg.inp
+    >>> print sn_reg.train_pred_file
+    $SKYNETPATH/network/identification_train_pred.txt
+    >>> print sn_reg.valid_pred_file
+    $SKYNETPATH/network/identification_test_pred.txt
+    >>> print sn_reg.network_file
+    $SKYNETPATH/network/identification_network.txt
+    >>> print sn_reg.output_file
+    $SKYNETPATH/predictions/identification_predictions.txt
+    
+    
 
