@@ -25,7 +25,7 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   install
+   installl
    Regression
    Classification
    files
