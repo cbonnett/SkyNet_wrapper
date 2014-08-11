@@ -13,7 +13,7 @@ First clone the **pySkyNet** repository:
 
 .. code ::
 
-    git clone https://github.com/cbonnett/SkyNet_wrapper.git
+    $ git clone https://github.com/cbonnett/SkyNet_wrapper.git
 
 The create a system variable SKYNETPATH
 to an exciting folder where you want to store **SkyNet**

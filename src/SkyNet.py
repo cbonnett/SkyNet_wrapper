@@ -24,7 +24,12 @@ reference : http://xxx.lanl.gov/abs/1309.0790
 import numpy as np
 import os
 import subprocess
+import re
+import pandas as pd
+from matplotlib import pyplot as plt
+import seaborn as sns
 import write_SkyNet_files as binning
+
 
 __all__ = ["SkyNetClassifier", "SkyNetRegressor"]
 
@@ -45,13 +50,57 @@ except:
 #                            " it at http://ccpforge.cse.rl.ac.uk/gf/project/skynet/")
 
 
-def parse_SkyNet_output(out):
-    '''Parse stdout from SkyNet and print summary to screen
+def parse_SkyNet_output(out,iteration_frequency,classification_network):
+    '''Parse stdout from SkyNet
+    
+    TODO implement classification error
+    
+    returns pandas dataframes with 
+    the training and validation error/corr
+    per step.
+    
     '''
-    search_term = 'Network Training Complete.'
-    loc = out.find(search_term)
-    print out[loc:]
+    if classification_network == False:
+        step_loc = [m.start() for m in re.finditer('Step', out)]
+        steps = np.arange(iteration_frequency,
+                          (len(step_loc)+1) * iteration_frequency,
+                          iteration_frequency)
 
+        train_error_array = []
+        valid_error_array = []
+
+        train_corr_array = []
+        valid_corr_array = []
+
+        for i in xrange(len(step_loc)):
+
+            out2 = out[step_loc[i]:step_loc[i]+440]
+            corr_loc = [m.start() for m in re.finditer('combined correlation', out2)]
+            err_loc = [m.start() for m in re.finditer('error squared', out2)]
+
+            train_corr_array.append(float(out2[corr_loc[0]+23:corr_loc[0]+30].rstrip()))
+            valid_corr_array.append(float(out2[corr_loc[1]+23:corr_loc[1]+30].rstrip()))
+
+            train_error_array.append(float(out2[err_loc[0]+16:err_loc[0]+23].rstrip()))
+            valid_error_array.append(float(out2[err_loc[1]+16:err_loc[1]+23].rstrip()))
+
+        error_array = np.vstack((train_error_array,valid_error_array)).T
+                             
+        corr_array = np.vstack((train_corr_array, valid_corr_array)).T
+                             
+        df_error_array = pd.DataFrame(error_array, index=steps,
+                                      columns=['train_error',
+                                               'valid_error'])
+
+        df_corr_array = pd.DataFrame(corr_array, index=steps,
+                                      columns=['train_corr',
+                                                'valid_corr'])
+
+        return df_error_array,df_corr_array
+
+    else:
+
+        return None,None
 
 class SkyNet():
     """
@@ -132,10 +181,18 @@ class SkyNet():
                                         self.reset_sigma, self.randomise_weights)
 
         ### run SkyNet and catch output ###
-        SkyNet_run_array = ''.join(['mpirun -np ', str(self.n_jobs), ' SkyNet ', self.SkyNet_config_file])
-        p = subprocess.Popen(SkyNet_run_array, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        SkyNet_run_array = ''.join(['mpirun -np ',
+                                    str(self.n_jobs),
+                                    ' SkyNet ',
+                                    self.SkyNet_config_file])
+        p = subprocess.Popen(SkyNet_run_array,
+                             shell=True,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT)
         out, err = p.communicate()
-        parse_SkyNet_output(out)
+        self.error_dataframe, self.corr_dataframe = parse_SkyNet_output(out,
+                            self.iteration_print_frequency,
+                            self.classification_network)
 
         ### read the results from the files ###
         self.train_pred_file = ''.join([output_root_file, 'train_pred.txt'])
@@ -157,7 +214,6 @@ class SkyNet():
 # =============================================================================
 # Public estimators
 # =============================================================================
-
 
 class SkyNetClassifier(SkyNet):
     """A neural net classifier.
@@ -264,7 +320,7 @@ class SkyNetClassifier(SkyNet):
         reset hyperparameters upon resume.
     randomise_weights : float, optional (default = 0.01)
         Random factor to add to saved weights upon resume.
-    verbose : int, optional (default=3)
+    verbose : int, optional (default=2)
         Verbosity level of feedback sent to stdout
         by SkyNet (0=min, 3=max).
     pretrain : bool,
@@ -324,7 +380,7 @@ class SkyNetClassifier(SkyNet):
                  recurrent = False,
                  convergence_function = 4,
                  validation_data = True,
-                 verbose = 3,
+                 verbose = 2,
                  pretrain = False,
                  nepoch = 10,
                  line_search = 0,
@@ -542,7 +598,7 @@ class SkyNetRegressor(SkyNet):
         reset hyperparameters upon resume.
     randomise_weights : float, optional (default = 0.01)
         Random factor to add to saved weights upon resume.
-    verbose : int, optional (default=3)
+    verbose : int, optional (default=2)
         Verbosity level of feedback sent to stdout
         by SkyNet (0=min, 3=max).
     pretrain : bool,
@@ -602,7 +658,7 @@ class SkyNetRegressor(SkyNet):
                  recurrent = False,
                  convergence_function = 4,
                  validation_data = True,
-                 verbose = 3,
+                 verbose = 2,
                  pretrain = False,
                  nepoch = 10,
                  line_search = 0,
