@@ -59,6 +59,7 @@ def parse_SkyNet_output(out,iteration_frequency,classification_network):
     the training and validation error/corr
     per step.
     
+    
     '''
     if classification_network == False:
         step_loc = [m.start() for m in re.finditer('Step', out)]
