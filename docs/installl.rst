@@ -15,7 +15,7 @@ First clone the **pySkyNet** repository:
 
     $ git clone https://github.com/cbonnett/SkyNet_wrapper.git
 
-The create a system variable SKYNETPATH
+Then create a system variable SKYNETPATH
 to an exciting folder where you want to store **SkyNet**
 training, validation, predictions, configuration and prediction files.
 
@@ -31,7 +31,7 @@ tch shell:
 
     $ SETENV SKYNETPATH /path/where/you/want/to/store/skynet/data/
 
-Once the $SKYNETPATH is set, you run: 
+Once the $SKYNETPATH is set, in the **pySkyNet** repo you run: 
 
 .. code:: python
 
