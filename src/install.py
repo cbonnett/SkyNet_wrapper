@@ -9,8 +9,8 @@ except:
     print "Exiting the setup"
     sys.exit(1)
 
-os.mkdir(''.join([SkyNet_path,'config_files']))
-os.mkdir(''.join([SkyNet_path,'network']))
-os.mkdir(''.join([SkyNet_path,'predicitions']))
-os.mkdir(''.join([SkyNet_path,'train_valid']))
+os.mkdir(''.join([SkyNet_path, 'config_files']))
+os.mkdir(''.join([SkyNet_path, 'network']))
+os.mkdir(''.join([SkyNet_path, 'predicitions']))
+os.mkdir(''.join([SkyNet_path, 'train_valid']))
 

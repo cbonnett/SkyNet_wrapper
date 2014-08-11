@@ -7,56 +7,67 @@ Which files are written to disk ?
 away files that SkyNet uses. Once the neural net is trained pySkyNet
 reads in the results and returns them to the user. 
 
-Files written before and after of training:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Files written before training:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **The features and targets for training:**
 
 .. code:: python
     
-    self.train_input_file  = ''.join([self.input_root,self.id,'train.txt'])
+    self.train_input_file  = ''.join([self.input_root, self.id, 'train.txt'])
 
 **The features and targets for validation:**
 
 .. code:: python
     
-    self.valid_input_file  = ''.join([self.input_root,self.id,'test.txt'])
+    self.valid_input_file  = ''.join([self.input_root, self.id,'test.txt'])
 
 **The SkyNet configuration file:**
 
 .. code:: python
 
-    self.network_file = ''.join([self.output_root,self.id ,'_','network.txt']) 
-  
+    self.SkyNet_config_file = ''.join([self.config_root, self.id, '_reg.inp']) #Regression
+    self.SkyNet_config_file = ''.join([self.config_root, self.id, '_cla.inp']) #Classification
+
+Files written after training:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Once training has completed SkyNet writes the following files to disk:
-    
+
 **Training predictions:** 
 
 .. code:: python
     
-    self.train_pred_file = ''.join([output_root_file,'train_pred.txt'])
+    self.train_pred_file = ''.join([output_root_file, 'train_pred.txt'])
 
 **Validation predictions:**
 
 .. code:: python
     
-    self.valid_pred_file = ''.join([output_root_file,'test_pred.txt'])
+    self.valid_pred_file = ''.join([output_root_file, 'test_pred.txt'])
         
-Files written after predictions:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Learned weights file:**
+
+.. code:: python
+
+    self.network_file = ''.join([output_root_file, 'network.txt'])
+
+Files written after predicting:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **Prediction file:**
 
 .. code:: python
 
-    self.output_file = ''.join([self.result_root,self.id,'_predictions.txt'])
+    self.output_file = ''.join([self.result_root,self.id, '_predictions.txt'])
 
 Format of prediction files:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 All files that contain predictions have the same format. 
-Even for a prediction where the labels or targets are not knows.
-The format of the columns is follow for regression:
+regardless if labels or targets are not known or not.
+
+|The format of the columns is follows for regression predictions:
     
 .. raw:: html
 
@@ -106,8 +117,8 @@ For Classification it is as follows:
 
 |
 
-If the true targets/classes are not know these values are meaningless but will still be printed to file.
+If the true targets/classes are not know the 'true' values are meaningless, but they will still be printed to file.
 **pySkyNet** only returns the prediction values.
 The `true_class_[n]` is printed in one-hot encoding, thus all values are zero expect for the correct class.
-The sum of all values of prob_class_[n] is equal to 1.  
+The sum of all values of prob_class_[n] is equal to 1.
 
