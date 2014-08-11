@@ -3,10 +3,11 @@ pySkyNet a Python wrapper for SkyNet
 
 Documentation:
 --------------
+
 http://pyskynet.readthedocs.org/en/latest/index.html
 
 What is SkyNet:
---------------
+---------------
 
 SkyNet is an efficient and robust neural
 network training code for machine
@@ -26,5 +27,5 @@ http://ccpforge.cse.rl.ac.uk/gf/project/skynet/
 
 References:
 -----------
-SKyNet is written by Philip Graff, Farhan Feroz, Michael P. Hobson, Anthony N. Lasenby
+SkyNet is written by Philip Graff, Farhan Feroz, Michael P. Hobson, Anthony N. Lasenby
 http://xxx.lanl.gov/abs/1309.0790

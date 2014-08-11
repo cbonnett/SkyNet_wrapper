@@ -69,8 +69,8 @@ Format of prediction files:
 All files that contain predictions have the same format. 
 regardless if labels or targets are not known or not.
 
-|The format of the columns is follows for regression predictions:
-    
+| The format of the columns is follows for regression predictions:
+
 .. raw:: html
 
     <style type="text/css">
