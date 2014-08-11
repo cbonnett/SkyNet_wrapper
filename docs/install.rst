@@ -23,7 +23,7 @@ Bash shell:
 
 .. code::
 
-    SETENV SKYNETPATH /path/where/you/want/to/store/skynet/data/
+    export SKYNETPATH /path/where/you/want/to/store/skynet/data/
 
 tch shell:
 
