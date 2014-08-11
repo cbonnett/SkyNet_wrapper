@@ -23,19 +23,19 @@ Bash shell:
 
 .. code::
 
-    export SKYNETPATH /path/where/you/want/to/store/skynet/data/
+    $ export SKYNETPATH /path/where/you/want/to/store/skynet/data/
 
 tch shell:
 
 .. code::
 
-    SETENV SKYNETPATH /path/where/you/want/to/store/skynet/data/
+    $ SETENV SKYNETPATH /path/where/you/want/to/store/skynet/data/
 
 Once the $SKYNETPATH is set, you run: 
 
 .. code:: python
 
-    python install.py
+    $ python install.py
 
 This will create 4 subfolders in $SKYNETPATH:
  - $SKYNETPATH/train_valid 
