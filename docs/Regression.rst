@@ -37,14 +37,14 @@ test data using the trained neural network.
     X_test =X[400:]
     y_test =y[400:]
     
-We instantiate the neural network with 3 hidden layers with each 10 nodes ``[10,10,10]``.
+We instantiate the neural network with 3 hidden layers with each 10 nodes ``(10, 10, 10)``.
 With linear rectified units as activation functions for the hidden layers and linear activation for the
-outputlayer ``[3,3,3,0]`` on a single core ``n_jobs=1``.
+outputlayer ``(3, 3, 3, 0)`` on a single core ``n_jobs=1``.
 We use the string ``'identification'`` as id.
 
 .. code:: python
     
-    sn_reg = SkyNetRegressor(id = 'identification_reg', n_jobs = 1, activation = [3,3,3,0], layers = [10,10,10], max_iter = 200)
+    sn_reg = SkyNetRegressor(id = 'identification_reg', n_jobs = 1, activation = (3, 3, 3, 0), layers = (0, 10, 10), max_iter = 200)
     
 Now we perform the actual training of the neural network
 
@@ -93,7 +93,7 @@ All code combined
    X_test =X[400:]
    y_test =y[400:]
    
-   sn_reg = SkyNetRegressor(id='identification_reg', n_jobs=1, activation=[3,3,3,0], layers=[10,10,10], max_iter=200)
+   sn_reg = SkyNetRegressor(id = 'identification_reg', n_jobs = 1, activation=(3, 3, 3, 0), layers = (10, 10, 10), max_iter=200)
    
    sn_reg.fit(X_train,y_train,X_valid,y_valid)
    

@@ -122,7 +122,7 @@ For Classification it is as follows:
 If the true targets/classes are not know the 'true' values are meaningless, but they will still be printed to file.
 **pySkyNet** only returns the prediction values.
 The `true_class_[n]` is printed in one-hot encoding, thus all values are zero expect for the correct class.
-The sum of all values of prob_class_[n] is equal to 1.
+The sum of all values of `prob_class_[n]` is equal to 1.
 
 Examples:
 ~~~~~~~~~

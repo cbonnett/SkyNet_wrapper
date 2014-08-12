@@ -36,14 +36,14 @@ test data using the trained neural network.
     X_test =X_class[100:]
     y_test =y_class[100:]
     
-We instantiate the neural network with 3 hidden layers with each 10 nodes ``[10,10,10]`` on the training data.
+We instantiate the neural network with 3 hidden layers with each 10 nodes ``(10, 10, 10)`` on the training data.
 With linear rectified units as activation functions for the hidden layers and linear activation for the
-outputlayer ``[3,3,3,0]`` on a single core ``n_jobs=1``. 
+outputlayer ``(3, 3, 3, 0)`` on a single core ``n_jobs=1``.
 We use the string ``'identification'`` as id.
 
 .. code:: python
     
-    sn_cla = SkyNetClassifier(id = 'identification_cla', n_jobs = 1, activation = [3,3,3,0], layers = [10,10,10], max_iter = 200)
+    sn_cla = SkyNetClassifier(id = 'identification_cla', n_jobs = 1, activation = (3, 3, 3, 0), layers = [10, 10, 10], max_iter = 200)
      
 Now we perform the actual training of the neural network
 
@@ -81,7 +81,7 @@ All code combined
     X_test =X_class[100:]
     y_test =y_class[100:]
     
-    sn_cla = SkyNetClassifier(id = 'identification_cla', n_jobs = 1, activation = [3, 3, 3, 0], layers = [10, 10, 10], max_iter = 200)
+    sn_cla = SkyNetClassifier(id = 'identification_cla', n_jobs = 1, activation = (3, 3, 3, 0), layers = (10, 10, 10), max_iter = 200)
     
     sn_cla.fit(X_train, y_train, X_valid, y_valid)
     
