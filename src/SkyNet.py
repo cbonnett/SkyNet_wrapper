@@ -24,8 +24,6 @@ reference : http://xxx.lanl.gov/abs/1309.0790
 import numpy as np
 import os
 import subprocess
-import re
-import pandas as pd
 import write_SkyNet_files as binning
 
 
@@ -36,107 +34,6 @@ try:
 except:
     SKYNET_PATH = '.'
 
-
-def _parse_SkyNet_output(out, iteration_frequency,
-                        classification_network, verbose,validation_data):
-    '''Parse stdout from SkyNet
-    
-    TODO implement classification error
-    
-    returns pandas dataframes with 
-    the training and validation error/corr
-    per step.
-    '''
-
-    if verbose != 2:
-        
-        print 'If verbose != 2 '
-        print 'pySkyNet will not return'
-        print 'the error and correlation as'
-        print 'a function of step.'
-
-        return None,None
-        
-    elif not validation_data:
-
-        print 'If NOT validation_data'
-        print 'pySkyNet will not return'
-        print 'the error and correlation as'
-        print 'a function of step'
-
-        return None,None
-
-    else:
-        ### replace all tabs by spaces ###
-        out = out.replace('\t', '                ')
-        out = out.replace('\nValidation', '          \nValidation')
-        out = out.replace('\nBest value', '          \nBest value')
-        ### return all occurences of Step ###
-        step_loc = [m.start() for m in re.finditer('Step', out)]
-        ### array with all step values ###
-        steps = np.arange(iteration_frequency,
-                          (len(step_loc)+1) * iteration_frequency,
-                          iteration_frequency)
-
-        train_error_array = []
-        valid_error_array = []
-
-        train_corr_array = []
-        valid_corr_array = []
-
-        train_class_array = []
-        valid_class_array = []
-
-        #print out
-
-        for i in xrange(len(step_loc)):
-
-            out2 = out[step_loc[i]:step_loc[i]+440]
-            
-            if  not classification_network:
-                corr_loc = [m.start() for m in re.finditer('combined correlation', out2)]
-                err_loc = [m.start() for m in re.finditer('error squared', out2)]
-
-                train_corr_array.append(float(out2[corr_loc[0]+23:corr_loc[0]+34].strip()))
-                valid_corr_array.append(float(out2[corr_loc[1]+23:corr_loc[1]+34].strip()))
-                
-                train_error_array.append(float(out2[err_loc[0]+16:err_loc[0]+29].strip()))
-                valid_error_array.append(float(out2[err_loc[1]+16:err_loc[1]+29].strip()))
-
-            if classification_network:
-                                
-                corr_loc = [m.start() for m in re.finditer('correlation', out2)]
-                err_loc = [m.start() for m in re.finditer('error squared', out2)]
-                class_loc = [m.start() for m in re.finditer('%', out2)]
-
-                train_corr_array.append(float(out2[corr_loc[0]+13:corr_loc[0]+24].strip()))
-                valid_corr_array.append(float(out2[corr_loc[1]+13:corr_loc[1]+24].strip()))
-
-                train_error_array.append(float(out2[err_loc[0]+15:err_loc[0]+28].strip()))
-                valid_error_array.append(float(out2[err_loc[1]+15:err_loc[1]+28].strip()))
-                
-                train_class_array.append(float(out2[class_loc[0]-10:class_loc[0]].strip()))
-                valid_class_array.append(float(out2[class_loc[2]-10:class_loc[2]].strip()))
-
-                class_array = np.vstack((train_class_array,valid_class_array)).T
-
-        error_array = np.vstack((train_error_array,valid_error_array)).T
-        corr_array = np.vstack((train_corr_array, valid_corr_array)).T
-        
-        df_error_array = pd.DataFrame(error_array, index=steps,
-                                      columns=['training error',
-                                               'validation error'])
-
-        df_corr_array = pd.DataFrame(corr_array, index=steps,
-                                      columns=['training correlation',
-                                                'validation correlation'])
-        if not classification_network:
-            return df_error_array,df_corr_array,None
-        if classification_network:
-            df_class_array = pd.DataFrame(class_array, index=steps,
-                                          columns=['training classification error',
-                                                   'validation classification error'])
-            return df_error_array,df_corr_array,df_class_array
 
 class SkyNet():
     """
@@ -160,7 +57,7 @@ class SkyNet():
           The target values (class labels in classification).
         """
 
-        ### check of feauture lengths are equal ###
+        ### check of feature lengths are equal ###
         _, self.n_features_ = X_train.shape
         _, valid_features = X_valid.shape
         if self.n_features_ != valid_features:
@@ -178,7 +75,7 @@ class SkyNet():
                 raise ValueError("Training and validation must have the same "
                                  "number of classes. Train has %s classes "
                                  "and valid has %s classes"
-                                  % (self.n_classes_), len(classes_valid))
+                                  % self.n_classes_, len(classes_valid))
 
         ### training/validation file names to be written ###
         self.train_input_file = ''.join([self.input_root, self.id, '_train.txt'])
@@ -227,7 +124,7 @@ class SkyNet():
                              stderr=subprocess.STDOUT)
         out, err = p.communicate()
         self.error_dataframe, self.corr_dataframe, self.class_dataframe = (
-        _parse_SkyNet_output(out,
+        binning._parse_SkyNet_output(out,
                              self.iteration_print_frequency,
                              self.classification_network, self.verbose,
                              self.validation_data))
@@ -305,7 +202,7 @@ class SkyNetClassifier(SkyNet):
         Is there validation data to test against?
         Strongly advise to use to prevent overfitting
     confidence_rate : float, optional (default=0.03)
-        Initial learing rate
+        Initial learning rate
         Step size factor, higher values are more aggressive.
     confidence_rate_minimum : float, optional (default=0.02)
         minimum confidence rate allowed
@@ -347,7 +244,7 @@ class SkyNetClassifier(SkyNet):
         Initial noise level, set on (un-)whitened data.
     fix_seed : bool, optional (default =False)
         Use a fixed seed?
-        Usefull for debugging and unit-test.
+        Useful for debugging and unit-test.
     fixed_seed : int, optional (default =0)
         Seed to use if fix_seed == True.
     resume : bool, optional (default = False)
@@ -399,8 +296,8 @@ class SkyNetClassifier(SkyNet):
                  output_root = ''.join([SKYNET_PATH, 'network/']),
                  result_root = ''.join([SKYNET_PATH, 'predictions/']),
                  config_root = ''.join([SKYNET_PATH, 'config_files/']),
-                 layers = [10, 10, 10],
-                 activation = [2, 2, 2, 0],
+                 layers = (10, 10, 10),
+                 activation = (2, 2, 2, 0),
                  prior = True,
                  confidence_rate = 0.3,
                  confidence_rate_minimum = 0.02,
@@ -507,7 +404,7 @@ class SkyNetClassifier(SkyNet):
         dummy_classes = np.random.randint(0, high = self.n_classes_, size = n_samples_pred)
         binning.write_SkyNet_cla_bin(self.pred_input_file, X, dummy_classes)
 
-        ### check file exitence ###
+        ### check file existence ###
         if not os.path.isfile(self.network_file):
             raise IOError("Network file %s not found " % (self.network_file))
         if not os.path.isfile(self.train_input_file):
@@ -515,7 +412,7 @@ class SkyNetClassifier(SkyNet):
         if not os.path.isfile(self.pred_input_file):
             raise IOError("Prediction file %s not found " % (self.pred_input_file))
 
-        ### calulate predictions ###
+        ### calculate predictions ###
         SkyNet_predictions_string = ''.join(['CalPred',
                                              ' 0 1 0 ',
                                              self.network_file, ' ',
@@ -677,8 +574,8 @@ class SkyNetRegressor(SkyNet):
                  output_root = ''.join([SKYNET_PATH, 'network/']),
                  result_root = ''.join([SKYNET_PATH, 'predictions/']),
                  config_root = ''.join([SKYNET_PATH, 'config_files/']),
-                 layers = [10, 10, 10],
-                 activation = [2, 2, 2, 0],
+                 layers = (10, 10, 10),
+                 activation = (2, 2, 2, 0),
                  prior = True,
                  confidence_rate = 0.3,
                  confidence_rate_minimum = 0.02,
