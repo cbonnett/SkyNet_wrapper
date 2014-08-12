@@ -6,6 +6,7 @@ Neural Net convergence plots with pySkyNet
 Using **pySkyNet** is trivial to create convergence plots of the trained neural network for either
 regression of classification. For plotting we recommend the `seaborn library <http://web.stanford.edu/~mwaskom/software/seaborn/>`_ .
 Although it will work with matplotlib.
+The values are kept for each `iteration_print_frequency` for which the default value is 50.
 
 Here is an example on how to obtain the convergence plots:
 
@@ -27,7 +28,10 @@ Setup:
     X_valid = X[200:400]
     y_valid = y[200:400]
 
-    sn_reg = SkyNetRegressor(id = 'identification_reg', n_jobs = 1, activation=(3, 3, 3, 0), layers = (10, 10, 10), max_iter=200)
+    sn_reg = SkyNetRegressor(id = 'identification_reg', n_jobs = 1,
+                             activation=(3, 3, 3, 0), layers = (10, 10, 10),
+                             max_iter=200,iteration_print_frequency=1)
+
     sn_reg.fit(X_train,y_train,X_valid,y_valid)
 
 Error squared as function of steps:
