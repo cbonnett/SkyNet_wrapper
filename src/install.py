@@ -5,7 +5,7 @@ try:
     SkyNet_path =  os.environ["SKYNETPATH"]
 except:
     print "$SKYNETPATH is not set"
-    print "Please set SKYNETPATH" 
+    print "Please set $SKYNETPATH" 
     print "Exiting the setup"
     sys.exit(1)
 

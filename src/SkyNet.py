@@ -26,8 +26,6 @@ import os
 import subprocess
 import re
 import pandas as pd
-from matplotlib import pyplot as plt
-import seaborn as sns
 import write_SkyNet_files as binning
 
 
@@ -39,7 +37,8 @@ except:
     SKYNET_PATH = '.'
 
 
-def parse_SkyNet_output(out,iteration_frequency,classification_network,verbose):
+def _parse_SkyNet_output(out, iteration_frequency,
+                        classification_network, verbose,validation_data):
     '''Parse stdout from SkyNet
     
     TODO implement classification error
@@ -48,57 +47,96 @@ def parse_SkyNet_output(out,iteration_frequency,classification_network,verbose):
     the training and validation error/corr
     per step.
     '''
-    if verbose < 3:
+
+    if verbose != 2:
         
-        print 'Verbose is set to < 3 '
+        print 'If verbose != 2 '
         print 'pySkyNet will not return'
-        print 'Error and correlation as'
-        print 'as a function of step'
+        print 'the error and correlation as'
+        print 'a function of step.'
+
+        return None,None
         
-        return 0
+    elif not validation_data:
+
+        print 'If NOT validation_data'
+        print 'pySkyNet will not return'
+        print 'the error and correlation as'
+        print 'a function of step'
+
+        return None,None
+
     else:
-        if classification_network == False:
-            ### return all occurences of Step ###
-            step_loc = [m.start() for m in re.finditer('Step', out)]
-            ### array with all step values ###
-            steps = np.arange(iteration_frequency,
-                              (len(step_loc)+1) * iteration_frequency,
-                              iteration_frequency)
+        ### replace all tabs by spaces ###
+        out = out.replace('\t', '                ')
+        out = out.replace('\nValidation', '          \nValidation')
+        out = out.replace('\nBest value', '          \nBest value')
+        ### return all occurences of Step ###
+        step_loc = [m.start() for m in re.finditer('Step', out)]
+        ### array with all step values ###
+        steps = np.arange(iteration_frequency,
+                          (len(step_loc)+1) * iteration_frequency,
+                          iteration_frequency)
 
-            train_error_array = []
-            valid_error_array = []
+        train_error_array = []
+        valid_error_array = []
 
-            train_corr_array = []
-            valid_corr_array = []
+        train_corr_array = []
+        valid_corr_array = []
 
-            for i in xrange(len(step_loc)):
+        train_class_array = []
+        valid_class_array = []
 
-                out2 = out[step_loc[i]:step_loc[i]+440]
+        #print out
+
+        for i in xrange(len(step_loc)):
+
+            out2 = out[step_loc[i]:step_loc[i]+440]
+            
+            if  not classification_network:
                 corr_loc = [m.start() for m in re.finditer('combined correlation', out2)]
                 err_loc = [m.start() for m in re.finditer('error squared', out2)]
 
-                train_corr_array.append(float(out2[corr_loc[0]+23:corr_loc[0]+30].rstrip()))
-                valid_corr_array.append(float(out2[corr_loc[1]+23:corr_loc[1]+30].rstrip()))
+                train_corr_array.append(float(out2[corr_loc[0]+23:corr_loc[0]+34].strip()))
+                valid_corr_array.append(float(out2[corr_loc[1]+23:corr_loc[1]+34].strip()))
+                
+                train_error_array.append(float(out2[err_loc[0]+16:err_loc[0]+29].strip()))
+                valid_error_array.append(float(out2[err_loc[1]+16:err_loc[1]+29].strip()))
 
-                train_error_array.append(float(out2[err_loc[0]+16:err_loc[0]+23].rstrip()))
-                valid_error_array.append(float(out2[err_loc[1]+16:err_loc[1]+23].rstrip()))
+            if classification_network:
+                                
+                corr_loc = [m.start() for m in re.finditer('correlation', out2)]
+                err_loc = [m.start() for m in re.finditer('error squared', out2)]
+                class_loc = [m.start() for m in re.finditer('%', out2)]
 
-            error_array = np.vstack((train_error_array,valid_error_array)).T
-            corr_array = np.vstack((train_corr_array, valid_corr_array)).T
-                             
-            df_error_array = pd.DataFrame(error_array, index=steps,
-                                          columns=['train_error',
-                                                   'valid_error'])
+                train_corr_array.append(float(out2[corr_loc[0]+13:corr_loc[0]+24].strip()))
+                valid_corr_array.append(float(out2[corr_loc[1]+13:corr_loc[1]+24].strip()))
 
-            df_corr_array = pd.DataFrame(corr_array, index=steps,
-                                          columns=['train_corr',
-                                                    'valid_corr'])
+                train_error_array.append(float(out2[err_loc[0]+15:err_loc[0]+28].strip()))
+                valid_error_array.append(float(out2[err_loc[1]+15:err_loc[1]+28].strip()))
+                
+                train_class_array.append(float(out2[class_loc[0]-10:class_loc[0]].strip()))
+                valid_class_array.append(float(out2[class_loc[2]-10:class_loc[2]].strip()))
 
-            return df_error_array,df_corr_array
+                class_array = np.vstack((train_class_array,valid_class_array)).T
 
-        else:
+        error_array = np.vstack((train_error_array,valid_error_array)).T
+        corr_array = np.vstack((train_corr_array, valid_corr_array)).T
+        
+        df_error_array = pd.DataFrame(error_array, index=steps,
+                                      columns=['training error',
+                                               'validation error'])
 
-            return None,None
+        df_corr_array = pd.DataFrame(corr_array, index=steps,
+                                      columns=['training correlation',
+                                                'validation correlation'])
+        if not classification_network:
+            return df_error_array,df_corr_array,None
+        if classification_network:
+            df_class_array = pd.DataFrame(class_array, index=steps,
+                                          columns=['training classification error',
+                                                   'validation classification error'])
+            return df_error_array,df_corr_array,df_class_array
 
 class SkyNet():
     """
@@ -178,7 +216,7 @@ class SkyNet():
                                         self.norbias, self.reset_alpha,
                                         self.reset_sigma, self.randomise_weights)
 
-        ### run SkyNet and catch output ###
+        ### run SkyNet and catch std output ###
         SkyNet_run_array = ''.join(['mpirun -np ',
                                     str(self.n_jobs),
                                     ' SkyNet ',
@@ -188,9 +226,11 @@ class SkyNet():
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
         out, err = p.communicate()
-        self.error_dataframe, self.corr_dataframe = parse_SkyNet_output(out,
-                            self.iteration_print_frequency,
-                            self.classification_network)
+        self.error_dataframe, self.corr_dataframe, self.class_dataframe = (
+        _parse_SkyNet_output(out,
+                             self.iteration_print_frequency,
+                             self.classification_network, self.verbose,
+                             self.validation_data))
 
         ### read the results from the files ###
         self.train_pred_file = ''.join([output_root_file, 'train_pred.txt'])

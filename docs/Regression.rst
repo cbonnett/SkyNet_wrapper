@@ -44,7 +44,7 @@ We use the string ``'identification'`` as id.
 
 .. code:: python
     
-    sn_reg = SkyNetRegressor(id = 'identification', n_jobs = 1, activation = [3,3,3,0], layers = [10,10,10], max_iter = 200)
+    sn_reg = SkyNetRegressor(id = 'identification_reg', n_jobs = 1, activation = [3,3,3,0], layers = [10,10,10], max_iter = 200)
     
 Now we perform the actual training of the neural network
 
@@ -93,7 +93,7 @@ All code combined
    X_test =X[400:]
    y_test =y[400:]
    
-   sn_reg = SkyNetRegressor(id='identification', n_jobs=1, activation=[3,3,3,0], layers=[10,10,10], max_iter=200)
+   sn_reg = SkyNetRegressor(id='identification_reg', n_jobs=1, activation=[3,3,3,0], layers=[10,10,10], max_iter=200)
    
    sn_reg.fit(X_train,y_train,X_valid,y_valid)
    

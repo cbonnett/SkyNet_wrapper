@@ -11,7 +11,7 @@ Classification : Prediction class membership for a new example.
 
     from sklearn.datasets import load_iris
     from sklearn.utils import shuffle
-    from SkyNet import SkyNetRegressor
+    from SkyNet import SkyNetClassifier
 
     # X are the features and y are the targets
     # shuffle returns a random permutation 
@@ -27,14 +27,14 @@ test data using the trained neural network.
 
 .. code:: python
 
-    X_train = X[0:70]
-    y_train = y[0:70]
+    X_train = X_class[0:70]
+    y_train = y_class[0:70]
      
-    X_valid = X[70:100]
-    y_valid = y[70:100]
+    X_valid = X_class[70:100]
+    y_valid = y_class[70:100]
 
-    X_test =X[100:]
-    y_test =y[100:]
+    X_test =X_class[100:]
+    y_test =y_class[100:]
     
 We instantiate the neural network with 3 hidden layers with each 10 nodes ``[10,10,10]`` on the training data.
 With linear rectified units as activation functions for the hidden layers and linear activation for the
@@ -43,7 +43,7 @@ We use the string ``'identification'`` as id.
 
 .. code:: python
     
-    sn_cla = SkyNetClassifier(id = 'identification', n_jobs = 1, activation = [3,3,3,0], layers = [10,10,10], max_iter = 200)
+    sn_cla = SkyNetClassifier(id = 'identification_cla', n_jobs = 1, activation = [3,3,3,0], layers = [10,10,10], max_iter = 200)
      
 Now we perform the actual training of the neural network
 
@@ -66,22 +66,22 @@ All code combined
     
     from sklearn.datasets import load_iris
     from sklearn.utils import shuffle
-    from SkyNet import SkyNetRegressor
+    from SkyNet import SkyNetClassifier
 
     # X are the features and y are the targets
     # shuffle returns a random permutation 
     X_class,y_class = shuffle(load_iris().data, load_iris().target)
 
-    X_train = X[0:70]
-    y_train = y[0:70]
+    X_train = X_class[0:70]
+    y_train = y_class[0:70]
      
-    X_valid = X[70:100]
-    y_valid = y[70:100]
+    X_valid = X_class[70:100]
+    y_valid = y_class[70:100]
 
-    X_test =X[100:]
-    y_test =y[100:]
+    X_test =X_class[100:]
+    y_test =y_class[100:]
     
-    sn_cla = SkyNetClassifier(id = 'identification', n_jobs = 1, activation = [3,3,3,0], layers = [10,10,10], max_iter = 200)
+    sn_cla = SkyNetClassifier(id = 'identification_cla', n_jobs = 1, activation = [3, 3, 3, 0], layers = [10, 10, 10], max_iter = 200)
     
     sn_cla.fit(X_train, y_train, X_valid, y_valid)
     
