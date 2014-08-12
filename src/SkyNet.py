@@ -165,22 +165,16 @@ class SkyNetClassifier(SkyNet):
         id in the file-name.
     input_root : string, optional (default=custom)
         The folder where SkyNet-wrapper will write and SkyNet wil look for the train
-        and validation files. This parameter is best adjusted
-        in SkyNet.py
+        and validation files.
     output_root : string, optional (default=custom)
         The folder where SkyNet will write the network file
         (i.e the trained weights)
-        This parameter is best adjusted
-        in SkyNet.py
     result_root : string, optional (default=custom)
         The folder where SkyNet will write prediction
-        files.This parameter is best adjusted
-        in SkyNet.py
+        files.
     config_root : string, optional (default=custom)
         The folder where SkyNet will write the
         config file that it uses to train.
-        This parameter is best adjusted
-        in SkyNet.py
     layers : array , optional (default=[10,10,10])
         The amount of hidden layers and the amount
         of nodes per hidden layer. Default is 3
@@ -439,21 +433,15 @@ class SkyNetRegressor(SkyNet):
     ----------
     id : string, compulsory
         This is a base id used to as an identifier.
-        All files written by Skynet will contain
-        id in the file-name.
     input_root : string, optional (default=custom)
         The folder where SkyNet-wrapper will write and SkyNet wil look for the train
-        and validation files. This parameter is best adjusted
-        in SkyNet.py
+        and validation files.
     output_root : string, optional (default=custom)
         The folder where SkyNet will write the network file
         (i.e the trained weights)
-        This parameter is best adjusted
-        in SkyNet.py
     result_root : string, optional (default=custom)
         The folder where SkyNet will write prediction
-        files.This parameter is best adjusted
-        in SkyNet.py
+        files.
     config_root : string, optional (default=custom)
         The folder where SkyNet will write the
         config file that it uses to train.
@@ -607,6 +595,45 @@ class SkyNetRegressor(SkyNet):
                  randomise_weights = 0.1,
                  n_jobs = 1):
 
+        """
+
+        :param id:
+        :param classification_network:
+        :param input_root:
+        :param output_root:
+        :param result_root:
+        :param config_root:
+        :param layers:
+        :param activation:
+        :param prior:
+        :param confidence_rate:
+        :param confidence_rate_minimum:
+        :param iteration_print_frequency:
+        :param max_iter:
+        :param whitenin:
+        :param whitenout:
+        :param noise_scaling:
+        :param set_whitened_noise:
+        :param sigma:
+        :param fix_seed:
+        :param fixed_seed:
+        :param calculate_evidence:
+        :param historic_maxent:
+        :param recurrent:
+        :param convergence_function:
+        :param validation_data:
+        :param verbose:
+        :param pretrain:
+        :param nepoch:
+        :param line_search:
+        :param mini_batch_fraction:
+        :param resume:
+        :param norbias:
+        :param reset_alpha:
+        :param reset_sigma:
+        :param randomise_weights:
+        :param n_jobs:
+        """
         self.id = id
         self.classification_network = classification_network
         self.input_root = input_root
