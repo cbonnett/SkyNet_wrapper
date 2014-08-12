@@ -175,11 +175,11 @@ class SkyNetClassifier(SkyNet):
     config_root : string, optional (default=custom)
         The folder where SkyNet will write the
         config file that it uses to train.
-    layers : array , optional (default=[10,10,10])
+    layers : tuple , optional (default=(10,10,10))
         The amount of hidden layers and the amount
         of nodes per hidden layer. Default is 3
         hidden layers with 10 nodes in each layer.
-    activation : list =, optional (default=[2,2,2,0])
+    activation : tuple =, optional (default=(2,2,2,0))
         Which activation function to use per layer:
         0 = linear
         1 = sigmoid
@@ -447,11 +447,11 @@ class SkyNetRegressor(SkyNet):
         config file that it uses to train.
         This parameter is best adjusted
         in SkyNet.py
-    layers : array , optional (default=[10,10,10])
+    layers : tuple , optional (default=(10,10,10))
         The amount of hidden layers and the amount
         of nodes per hidden layer. Default is 3
         hidden layers with 10 nodes in each layer.
-    activation : list =, optional (default=[2,2,2,0])
+    activation : tuple =, optional (default=(2,2,2,0))
         Which activation function to use per layer:
         0 = linear
         1 = sigmoid
@@ -596,7 +596,6 @@ class SkyNetRegressor(SkyNet):
                  n_jobs = 1):
 
         """
-
         :param id:
         :param classification_network:
         :param input_root:
