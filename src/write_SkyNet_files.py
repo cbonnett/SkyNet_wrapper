@@ -6,7 +6,8 @@ import numpy as np
 import re
 import pandas as pd
 
-__all__ =["write_SkyNet_cla_bin", "write_SkyNet_reg", "write_SkyNet_config_file"]
+__all__ = ["write_SkyNet_cla_bin", "write_SkyNet_reg", "write_SkyNet_config_file"]
+
 
 def write_SkyNet_config_file(SkyNet_config_file,
                              train_input_file,
@@ -49,78 +50,79 @@ def write_SkyNet_config_file(SkyNet_config_file,
             see attributes of :class:`SkyNetClassfier` and :class:`SkyNetRegressor`
 
     """
-    ### reform activation format to SkyNet standard ###
+    # ## reform activation format to SkyNet standard ###
     act_temp = ''
     for act in activation:
         act_temp = ''.join([act_temp, str(act)])
 
     f_class = open(SkyNet_config_file, 'w')
-    print >>f_class, '#input_root'  
-    print >>f_class, train_input_file[:-9]
-    print >>f_class, '#output_root'
-    print >>f_class, network_file[:-11]
-    print >>f_class, '#classification_network'
-    print >>f_class, str(int(classification_network))
+    print >> f_class, '#input_root'
+    print >> f_class, train_input_file[:-9]
+    print >> f_class, '#output_root'
+    print >> f_class, network_file[:-11]
+    print >> f_class, '#classification_network'
+    print >> f_class, str(int(classification_network))
     for layer in layers:
-      print >>f_class, '#nhid'
-      print >>f_class, str(layer)
-    print >>f_class, '#activation'
-    print >>f_class, str(act_temp)
-    print >>f_class, '#prior'
-    print >>f_class, str(int(prior))
-    print >>f_class, '#whitenin'
-    print >>f_class, str(int(whitenin))
-    print >>f_class, '#whitenout'
-    print >>f_class, str(int(whitenout))
-    print >>f_class, '#noise_scaling'
-    print >>f_class, str(int(noise_scaling))
-    print >>f_class, '#set_whitened_noise'
-    print >>f_class, str(int(set_whitened_noise))
-    print >>f_class, '#sigma'
-    print >>f_class, str(sigma)
-    print >>f_class, '#confidence_rate'
-    print >>f_class, str(confidence_rate)
-    print >>f_class, '#confidence_rate_minimum'
-    print >>f_class, str(confidence_rate_minimum)
-    print >>f_class, '#iteration_print_frequency'
-    print >>f_class, str(iteration_print_frequency)
-    print >>f_class, '#fix_seed'
-    print >>f_class, str(int(fix_seed))
-    print >>f_class, '#fixed_seed'
-    print >>f_class, str(fixed_seed)
-    print >>f_class, '#calculate_evidence'
-    print >>f_class, str(int(calculate_evidence))
-    print >>f_class, '#resume'
-    print >>f_class, str(int(resume))
-    print >>f_class, '#norbias'
-    print >>f_class, str(int(norbias))
-    print >>f_class, '#reset_alpha'
-    print >>f_class, str(int(reset_alpha))
-    print >>f_class, '#reset_sigma'
-    print >>f_class, str(int(reset_sigma))
-    print >>f_class, '#randomise_weights'
-    print >>f_class, str(randomise_weights)
-    print >>f_class, '#historic_maxent'
-    print >>f_class, str(int(historic_maxent))
-    print >>f_class, '#recurrent'
-    print >>f_class, str(int(recurrent))
-    print >>f_class, '#convergence_function'
-    print >>f_class, str(convergence_function)
-    print >>f_class, '#validation_data'
-    print >>f_class, str(int(validation_data))
-    print >>f_class, '#verbose'
-    print >>f_class, str(verbose)
-    print >>f_class, '#pretrain'
-    print >>f_class, str(int(pretrain))
-    print >>f_class, '#nepoch'
-    print >>f_class, str(nepoch)
-    print >>f_class, '#max_iter'
-    print >>f_class, str(max_iter)
-    print >>f_class, '#line_search'
-    print >>f_class, str(line_search)
-    print >>f_class, '#mini-batch_fraction'
-    print >>f_class, str(mini_batch_fraction) 
+        print >> f_class, '#nhid'
+        print >> f_class, str(layer)
+    print >> f_class, '#activation'
+    print >> f_class, str(act_temp)
+    print >> f_class, '#prior'
+    print >> f_class, str(int(prior))
+    print >> f_class, '#whitenin'
+    print >> f_class, str(int(whitenin))
+    print >> f_class, '#whitenout'
+    print >> f_class, str(int(whitenout))
+    print >> f_class, '#noise_scaling'
+    print >> f_class, str(int(noise_scaling))
+    print >> f_class, '#set_whitened_noise'
+    print >> f_class, str(int(set_whitened_noise))
+    print >> f_class, '#sigma'
+    print >> f_class, str(sigma)
+    print >> f_class, '#confidence_rate'
+    print >> f_class, str(confidence_rate)
+    print >> f_class, '#confidence_rate_minimum'
+    print >> f_class, str(confidence_rate_minimum)
+    print >> f_class, '#iteration_print_frequency'
+    print >> f_class, str(iteration_print_frequency)
+    print >> f_class, '#fix_seed'
+    print >> f_class, str(int(fix_seed))
+    print >> f_class, '#fixed_seed'
+    print >> f_class, str(fixed_seed)
+    print >> f_class, '#calculate_evidence'
+    print >> f_class, str(int(calculate_evidence))
+    print >> f_class, '#resume'
+    print >> f_class, str(int(resume))
+    print >> f_class, '#norbias'
+    print >> f_class, str(int(norbias))
+    print >> f_class, '#reset_alpha'
+    print >> f_class, str(int(reset_alpha))
+    print >> f_class, '#reset_sigma'
+    print >> f_class, str(int(reset_sigma))
+    print >> f_class, '#randomise_weights'
+    print >> f_class, str(randomise_weights)
+    print >> f_class, '#historic_maxent'
+    print >> f_class, str(int(historic_maxent))
+    print >> f_class, '#recurrent'
+    print >> f_class, str(int(recurrent))
+    print >> f_class, '#convergence_function'
+    print >> f_class, str(convergence_function)
+    print >> f_class, '#validation_data'
+    print >> f_class, str(int(validation_data))
+    print >> f_class, '#verbose'
+    print >> f_class, str(verbose)
+    print >> f_class, '#pretrain'
+    print >> f_class, str(int(pretrain))
+    print >> f_class, '#nepoch'
+    print >> f_class, str(nepoch)
+    print >> f_class, '#max_iter'
+    print >> f_class, str(max_iter)
+    print >> f_class, '#line_search'
+    print >> f_class, str(line_search)
+    print >> f_class, '#mini-batch_fraction'
+    print >> f_class, str(mini_batch_fraction)
     f_class.close()
+
 
 def write_SkyNet_cla_bin(outfile, features, classes):
     """Writes a file Skynet to use with Skynet classifier.
@@ -134,10 +136,10 @@ def write_SkyNet_cla_bin(outfile, features, classes):
         classes : integer array of [n_samples]
             The classes that belong to the features.
     """
-    assert len(features[:,0]) == len(classes), 'Length of feature array not equal to length of classes array'
+    assert len(features[:, 0]) == len(classes), 'Length of feature array not equal to length of classes array'
 
-    outf = open(outfile,"w")
-    outf.write(str(len(features[0,:])))
+    outf = open(outfile, "w")
+    outf.write(str(len(features[0, :])))
     outf.write("\n")
     outf.write(str(len(np.unique(classes))))
     outf.write("\n")
@@ -146,11 +148,11 @@ def write_SkyNet_cla_bin(outfile, features, classes):
         classes -= 1
     elif classes.min() == 0:
         pass
-    else :
+    else:
         raise Exception("minimum of classes array is not 0 or 1")
 
     for k in np.arange(len(classes)):
-        a = ','.join([str(i) for i in features[k,:]])
+        a = ','.join([str(i) for i in features[k, :]])
         b = str(classes[k])
         outf.write(a)
         outf.write("\n")
@@ -158,7 +160,8 @@ def write_SkyNet_cla_bin(outfile, features, classes):
         outf.write("\n")
     outf.close()
 
-def write_SkyNet_reg(outfile,features,reg):
+
+def write_SkyNet_reg(outfile, features, reg):
     """Writes a file Skynet to use with Skynet regressor.
 
         Parameters
@@ -170,16 +173,16 @@ def write_SkyNet_reg(outfile,features,reg):
         reg : float array of [n_samples]
             The regression values that belong to the features.
     """
-    assert len(features[:,0]) == len(reg), 'Length of feature array is equal to length of reg array'
+    assert len(features[:, 0]) == len(reg), 'Length of feature array is equal to length of reg array'
 
-    outf = open(outfile,"w")
-    outf.write(str(len(features[0,:])))
+    outf = open(outfile, "w")
+    outf.write(str(len(features[0, :])))
     outf.write("\n")
     outf.write('1')
     outf.write("\n")
 
     for k in np.arange(len(reg)):
-        a = ','.join([str(i) for i in features[k,:]])
+        a = ','.join([str(i) for i in features[k, :]])
         b = str(reg[k])
         outf.write(a)
         outf.write("\n")
@@ -187,8 +190,9 @@ def write_SkyNet_reg(outfile,features,reg):
         outf.write("\n")
     outf.close()
 
+
 def _parse_SkyNet_output(out, iteration_frequency,
-                        classification_network, verbose,validation_data):
+                         classification_network, verbose, validation_data):
     """Parse stdout from SkyNet
 
     Returns pandas dataframes with
@@ -203,7 +207,7 @@ def _parse_SkyNet_output(out, iteration_frequency,
         print 'the error and correlation as'
         print 'a function of step.'
 
-        return None,None
+        return None, None
 
     elif not validation_data:
 
@@ -212,18 +216,18 @@ def _parse_SkyNet_output(out, iteration_frequency,
         print 'the error and correlation as'
         print 'a function of step'
 
-        return None,None
+        return None, None
 
     else:
-        ### replace all tabs by spaces ###
+        # ## replace all tabs by spaces ###
         out = out.replace('\t', '                ')
         out = out.replace('\nValidation', '          \nValidation')
         out = out.replace('\nBest value', '          \nBest value')
-        ### return all occurences of Step ###
+        ### return all occurrences of Step ###
         step_loc = [m.start() for m in re.finditer('Step', out)]
         ### array with all step values ###
         steps = np.arange(iteration_frequency,
-                          (len(step_loc)+1) * iteration_frequency,
+                          (len(step_loc) + 1) * iteration_frequency,
                           iteration_frequency)
 
         train_error_array = []
@@ -235,53 +239,50 @@ def _parse_SkyNet_output(out, iteration_frequency,
         train_class_array = []
         valid_class_array = []
 
-        #print out
-
         for i in xrange(len(step_loc)):
 
-            out2 = out[step_loc[i]:step_loc[i]+440]
+            out2 = out[step_loc[i]:step_loc[i] + 440]
 
-            if  not classification_network:
+            if not classification_network:
                 corr_loc = [m.start() for m in re.finditer('combined correlation', out2)]
                 err_loc = [m.start() for m in re.finditer('error squared', out2)]
 
-                train_corr_array.append(float(out2[corr_loc[0]+23:corr_loc[0]+34].strip()))
-                valid_corr_array.append(float(out2[corr_loc[1]+23:corr_loc[1]+34].strip()))
+                train_corr_array.append(float(out2[corr_loc[0] + 23:corr_loc[0] + 34].strip()))
+                valid_corr_array.append(float(out2[corr_loc[1] + 23:corr_loc[1] + 34].strip()))
 
-                train_error_array.append(float(out2[err_loc[0]+16:err_loc[0]+29].strip()))
-                valid_error_array.append(float(out2[err_loc[1]+16:err_loc[1]+29].strip()))
+                train_error_array.append(float(out2[err_loc[0] + 16:err_loc[0] + 29].strip()))
+                valid_error_array.append(float(out2[err_loc[1] + 16:err_loc[1] + 29].strip()))
 
             if classification_network:
-
                 corr_loc = [m.start() for m in re.finditer('correlation', out2)]
                 err_loc = [m.start() for m in re.finditer('error squared', out2)]
                 class_loc = [m.start() for m in re.finditer('%', out2)]
 
-                train_corr_array.append(float(out2[corr_loc[0]+13:corr_loc[0]+24].strip()))
-                valid_corr_array.append(float(out2[corr_loc[1]+13:corr_loc[1]+24].strip()))
+                train_corr_array.append(float(out2[corr_loc[0] + 13:corr_loc[0] + 24].strip()))
+                valid_corr_array.append(float(out2[corr_loc[1] + 13:corr_loc[1] + 24].strip()))
 
-                train_error_array.append(float(out2[err_loc[0]+15:err_loc[0]+28].strip()))
-                valid_error_array.append(float(out2[err_loc[1]+15:err_loc[1]+28].strip()))
+                train_error_array.append(float(out2[err_loc[0] + 15:err_loc[0] + 28].strip()))
+                valid_error_array.append(float(out2[err_loc[1] + 15:err_loc[1] + 28].strip()))
 
-                train_class_array.append(float(out2[class_loc[0]-10:class_loc[0]].strip()))
-                valid_class_array.append(float(out2[class_loc[2]-10:class_loc[2]].strip()))
+                train_class_array.append(float(out2[class_loc[0] - 10:class_loc[0]].strip()))
+                valid_class_array.append(float(out2[class_loc[2] - 10:class_loc[2]].strip()))
 
-                class_array = np.vstack((train_class_array,valid_class_array)).T
+                class_array = np.vstack((train_class_array, valid_class_array)).T
 
-        error_array = np.vstack((train_error_array,valid_error_array)).T
+        error_array = np.vstack((train_error_array, valid_error_array)).T
         corr_array = np.vstack((train_corr_array, valid_corr_array)).T
 
         df_error_array = pd.DataFrame(error_array, index=steps,
                                       columns=['training error',
-                                               'validation error'])
+                                      'validation error'])
 
         df_corr_array = pd.DataFrame(corr_array, index=steps,
-                                      columns=['training correlation',
-                                                'validation correlation'])
+                                     columns=['training correlation',
+                                     'validation correlation'])
         if not classification_network:
-            return df_error_array,df_corr_array,None
+            return df_error_array, df_corr_array, None
         if classification_network:
             df_class_array = pd.DataFrame(class_array, index=steps,
                                           columns=['training classification error',
-                                                   'validation classification error'])
-            return df_error_array,df_corr_array,df_class_array
+                                          'validation classification error'])
+            return df_error_array, df_corr_array, df_class_array
