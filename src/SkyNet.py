@@ -38,19 +38,8 @@ try:
 except:
     SKYNET_PATH = '.'
 
-# def test_SkyNet_install():
-#     p = subprocess.Popen('SkyNet', shell=True,
-#                           stdout=subprocess.PIPE,
-#                           stderr=subprocess.STDOUT)
-#     out, err = p.communicate()
-#     if out[:6] == 'Please':
-#         print 'SkyNet is installed, we did NOT check if mpi version is working'
-#     else:
-#         raise RuntimeError("SkyNet is not installed please download"
-#                            " it at http://ccpforge.cse.rl.ac.uk/gf/project/skynet/")
 
-
-def parse_SkyNet_output(out,iteration_frequency,classification_network):
+def parse_SkyNet_output(out,iteration_frequency,classification_network,verbose):
     '''Parse stdout from SkyNet
     
     TODO implement classification error
@@ -58,50 +47,58 @@ def parse_SkyNet_output(out,iteration_frequency,classification_network):
     returns pandas dataframes with 
     the training and validation error/corr
     per step.
-    
-    
     '''
-    if classification_network == False:
-        step_loc = [m.start() for m in re.finditer('Step', out)]
-        steps = np.arange(iteration_frequency,
-                          (len(step_loc)+1) * iteration_frequency,
-                          iteration_frequency)
-
-        train_error_array = []
-        valid_error_array = []
-
-        train_corr_array = []
-        valid_corr_array = []
-
-        for i in xrange(len(step_loc)):
-
-            out2 = out[step_loc[i]:step_loc[i]+440]
-            corr_loc = [m.start() for m in re.finditer('combined correlation', out2)]
-            err_loc = [m.start() for m in re.finditer('error squared', out2)]
-
-            train_corr_array.append(float(out2[corr_loc[0]+23:corr_loc[0]+30].rstrip()))
-            valid_corr_array.append(float(out2[corr_loc[1]+23:corr_loc[1]+30].rstrip()))
-
-            train_error_array.append(float(out2[err_loc[0]+16:err_loc[0]+23].rstrip()))
-            valid_error_array.append(float(out2[err_loc[1]+16:err_loc[1]+23].rstrip()))
-
-        error_array = np.vstack((train_error_array,valid_error_array)).T
-                             
-        corr_array = np.vstack((train_corr_array, valid_corr_array)).T
-                             
-        df_error_array = pd.DataFrame(error_array, index=steps,
-                                      columns=['train_error',
-                                               'valid_error'])
-
-        df_corr_array = pd.DataFrame(corr_array, index=steps,
-                                      columns=['train_corr',
-                                                'valid_corr'])
-
-        return df_error_array,df_corr_array
-
+    if verbose < 3:
+        
+        print 'Verbose is set to < 3 '
+        print 'pySkyNet will not return'
+        print 'Error and correlation as'
+        print 'as a function of step'
+        
+        return 0
     else:
+        if classification_network == False:
+            ### return all occurences of Step ###
+            step_loc = [m.start() for m in re.finditer('Step', out)]
+            ### array with all step values ###
+            steps = np.arange(iteration_frequency,
+                              (len(step_loc)+1) * iteration_frequency,
+                              iteration_frequency)
 
-        return None,None
+            train_error_array = []
+            valid_error_array = []
+
+            train_corr_array = []
+            valid_corr_array = []
+
+            for i in xrange(len(step_loc)):
+
+                out2 = out[step_loc[i]:step_loc[i]+440]
+                corr_loc = [m.start() for m in re.finditer('combined correlation', out2)]
+                err_loc = [m.start() for m in re.finditer('error squared', out2)]
+
+                train_corr_array.append(float(out2[corr_loc[0]+23:corr_loc[0]+30].rstrip()))
+                valid_corr_array.append(float(out2[corr_loc[1]+23:corr_loc[1]+30].rstrip()))
+
+                train_error_array.append(float(out2[err_loc[0]+16:err_loc[0]+23].rstrip()))
+                valid_error_array.append(float(out2[err_loc[1]+16:err_loc[1]+23].rstrip()))
+
+            error_array = np.vstack((train_error_array,valid_error_array)).T
+            corr_array = np.vstack((train_corr_array, valid_corr_array)).T
+                             
+            df_error_array = pd.DataFrame(error_array, index=steps,
+                                          columns=['train_error',
+                                                   'valid_error'])
+
+            df_corr_array = pd.DataFrame(corr_array, index=steps,
+                                          columns=['train_corr',
+                                                    'valid_corr'])
+
+            return df_error_array,df_corr_array
+
+        else:
+
+            return None,None
 
 class SkyNet():
     """
