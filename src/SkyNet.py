@@ -23,6 +23,8 @@ reference : http://xxx.lanl.gov/abs/1309.0790
 # Authors: CHRISTOPHER BONNETT <c.bonnett@gmail.com>
 # Licence: BSD 3 clause
 
+__version__ = '0.1'
+
 import numpy as np
 import os
 import subprocess
@@ -59,25 +61,27 @@ class SkyNet():
           The target values (class labels in classification).
         """
 
-        ### check of feature lengths are equal ###
+        # ## check of feature lengths are equal ###
         _, self.n_features_ = X_train.shape
         _, valid_features = X_valid.shape
         if self.n_features_ != valid_features:
             raise ValueError("Number of features in validation set must "
-                             " match the training set. Train n_features is %s and "
-                             " valid n_features is %s "
-                             % (self.n_features_, valid_features))
+                             " match the training set. Train n_features is {} and "
+                             " valid n_features is {} ".format(
+                             self.n_features_, valid_features))
 
         ### if class=True : check if  number classes are equal ###
         if self.classification_network:
             self.n_classes_ = len(np.unique(y_train))
             self.classes_ = np.unique(y_train)
             classes_valid = np.unique(y_valid)
+
+
             if not np.array_equal(self.classes_, classes_valid):
                 raise ValueError("Training and validation must have the same "
-                                 "number of classes. Train has %s classes "
-                                 "and valid has %s classes"
-                                  % self.n_classes_, len(classes_valid))
+                                 "number of classes. Train has {} classes "
+                                 "and valid has {} classes".format(
+                                 self.n_classes_, len(classes_valid)))
 
         ### training/validation file names to be written ###
         self.train_input_file = ''.join([self.input_root, self.id, '_train.txt'])
@@ -98,22 +102,22 @@ class SkyNet():
 
         ### write config file ###
         binning.write_SkyNet_config_file(self.SkyNet_config_file, self.train_input_file,
-                                        self.network_file, self.classification_network,
-                                        self.layers, self.activation,
-                                        self.prior, self.whitenin,
-                                        self.whitenout, self.noise_scaling,
-                                        self.set_whitened_noise, self.sigma,
-                                        self.confidence_rate,
-                                        self.confidence_rate_minimum,
-                                        self.iteration_print_frequency, self.fix_seed,
-                                        self.fixed_seed, self.calculate_evidence,
-                                        self.resume, self.historic_maxent,
-                                        self.recurrent, self.convergence_function,
-                                        self.validation_data, self.verbose,
-                                        self.pretrain, self.nepoch, self.max_iter,
-                                        self.line_search, self.mini_batch_fraction,
-                                        self.norbias, self.reset_alpha,
-                                        self.reset_sigma, self.randomise_weights)
+                                         self.network_file, self.classification_network,
+                                         self.layers, self.activation,
+                                         self.prior, self.whitenin,
+                                         self.whitenout, self.noise_scaling,
+                                         self.set_whitened_noise, self.sigma,
+                                         self.confidence_rate,
+                                         self.confidence_rate_minimum,
+                                         self.iteration_print_frequency, self.fix_seed,
+                                         self.fixed_seed, self.calculate_evidence,
+                                         self.resume, self.historic_maxent,
+                                         self.recurrent, self.convergence_function,
+                                         self.validation_data, self.verbose,
+                                         self.pretrain, self.nepoch, self.max_iter,
+                                         self.line_search, self.mini_batch_fraction,
+                                         self.norbias, self.reset_alpha,
+                                         self.reset_sigma, self.randomise_weights)
 
         ### run SkyNet and catch std output ###
         SkyNet_run_array = ''.join(['mpirun -np ',
@@ -121,32 +125,35 @@ class SkyNet():
                                     ' SkyNet ',
                                     self.SkyNet_config_file])
         p = subprocess.Popen(SkyNet_run_array,
-                             shell=True,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.STDOUT)
+                             shell = True,
+                             stdout = subprocess.PIPE,
+                             stderr = subprocess.STDOUT)
         out, err = p.communicate()
+
         self.error_dataframe, self.corr_dataframe, self.class_dataframe = (
-        binning._parse_SkyNet_output(out,
-                             self.iteration_print_frequency,
-                             self.classification_network, self.verbose,
-                             self.validation_data))
+            binning._parse_SkyNet_output(out,
+                                         self.iteration_print_frequency,
+                                         self.classification_network,
+                                         self.verbose,
+                                         self.validation_data))
 
         ### read the results from the files ###
         self.train_pred_file = ''.join([output_root_file, 'train_pred.txt'])
         self.valid_pred_file = ''.join([output_root_file, 'test_pred.txt'])
 
-        if self.classification_network: # pandas ? should be faster !
+        if self.classification_network:  # pandas ? should be faster !
             self.train_pred = np.loadtxt(self.train_pred_file,
-                                         usecols=range(self.n_classes_ + self.n_features_,
-                                         (2 * self.n_classes_) + self.n_features_))
+                                         usecols = range(self.n_classes_ + self.n_features_,
+                                                         (2 * self.n_classes_) + self.n_features_))
             self.valid_pred = np.loadtxt(self.valid_pred_file,
-                                         usecols=range(self.n_classes_ + self.n_features_,
-                                         (2 * self.n_classes_) + self.n_features_))
+                                         usecols = range(self.n_classes_ + self.n_features_,
+                                                         (2 * self.n_classes_) + self.n_features_))
         else:
             self.train_pred = np.loadtxt(self.train_pred_file,
-                                         usecols=[self.n_features_ + 1, ])
+                                         usecols = [self.n_features_ + 1, ])
             self.valid_pred = np.loadtxt(self.train_pred_file,
-                                         usecols=[self.n_features_ + 1, ])
+                                         usecols = [self.n_features_ + 1, ])
+
 
 # =============================================================================
 # Public estimators
@@ -384,7 +391,7 @@ class SkyNetClassifier(SkyNet):
             classes corresponds to that in the attribute `classes_`.
         """
 
-        ###  set file names  ###
+        # ##  set file names  ###
         self.pred_input_file = ''.join([self.input_root, self.id, '_to_predict.txt'])
         self.output_file = ''.join([self.result_root, self.id, '_predictions.txt'])
 
@@ -393,20 +400,20 @@ class SkyNetClassifier(SkyNet):
         if self.n_features_ != pred_n_features_:
             raise ValueError("Number of features in prediction set must "
                              "match the training/validation set."
-                             "Training set has  %s features "
-                             "Prediction set has %s features "
-                             % (self.n_features_, pred_n_features_))
+                             "Training set has  {} features "
+                             "Prediction set has {} features ".format(
+                             self.n_features_, pred_n_features_))
 
         dummy_classes = np.random.randint(0, high = self.n_classes_, size = n_samples_pred)
         binning.write_SkyNet_cla_bin(self.pred_input_file, X, dummy_classes)
 
         ### check file existence ###
         if not os.path.isfile(self.network_file):
-            raise IOError("Network file %s not found " % (self.network_file))
+            raise IOError("Network file {} not found".format(self.network_file))
         if not os.path.isfile(self.train_input_file):
-            raise IOError("Input file %s not found " % (self.train_input_file))
+            raise IOError("Input file {} not found".format(self.train_input_file))
         if not os.path.isfile(self.pred_input_file):
-            raise IOError("Prediction file %s not found " % (self.pred_input_file))
+            raise IOError("Prediction file {} not found".format(self.pred_input_file))
 
         ### calculate predictions ###
         SkyNet_predictions_string = ''.join(['CalPred',
@@ -415,12 +422,13 @@ class SkyNetClassifier(SkyNet):
                                              self.train_input_file, ' ',
                                              self.pred_input_file, ' ',
                                              self.output_file, ' 0 0 0'])
-        p = subprocess.Popen(SkyNet_predictions_string, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p = subprocess.Popen(SkyNet_predictions_string, shell = True, stdout = subprocess.PIPE,
+                             stderr = subprocess.STDOUT)
         out, err = p.communicate()
 
         ### read in prediction ###
         predictions = np.loadtxt(self.output_file,
-                                 usecols=range(self.n_classes_ + self.n_features_,
+                                 usecols = range(self.n_classes_ + self.n_features_,
                                  (2 * self.n_classes_) + self.n_features_))
 
         return predictions
@@ -595,44 +603,6 @@ class SkyNetRegressor(SkyNet):
                  randomise_weights = 0.1,
                  n_jobs = 1):
 
-        """
-        :param id:
-        :param classification_network:
-        :param input_root:
-        :param output_root:
-        :param result_root:
-        :param config_root:
-        :param layers:
-        :param activation:
-        :param prior:
-        :param confidence_rate:
-        :param confidence_rate_minimum:
-        :param iteration_print_frequency:
-        :param max_iter:
-        :param whitenin:
-        :param whitenout:
-        :param noise_scaling:
-        :param set_whitened_noise:
-        :param sigma:
-        :param fix_seed:
-        :param fixed_seed:
-        :param calculate_evidence:
-        :param historic_maxent:
-        :param recurrent:
-        :param convergence_function:
-        :param validation_data:
-        :param verbose:
-        :param pretrain:
-        :param nepoch:
-        :param line_search:
-        :param mini_batch_fraction:
-        :param resume:
-        :param norbias:
-        :param reset_alpha:
-        :param reset_sigma:
-        :param randomise_weights:
-        :param n_jobs:
-        """
         self.id = id
         self.classification_network = classification_network
         self.input_root = input_root
@@ -692,7 +662,7 @@ class SkyNetRegressor(SkyNet):
             The predicted values.
         """
 
-        ### set file names  ###
+        # ## set file names  ###
         self.pred_input_file = ''.join([self.input_root, self.id, '_to_predict.txt'])
         self.output_file = ''.join([self.result_root, self.id, '_predictions.txt'])
 
@@ -701,9 +671,9 @@ class SkyNetRegressor(SkyNet):
         if self.n_features_ != pred_n_features_:
             raise ValueError("Number of features in prediction set must "
                              "match the training/validation set."
-                             "Training set has  %s features "
-                             "Prediction set has %s features "
-                             % (self.n_features_, pred_n_features_))
+                             "Training set has  {} features "
+                             "Prediction set has {} features ".format(
+                             self.n_features_, pred_n_features_))
 
         ### write feature file ###
         dummy_targets = np.zeros(n_samples_pred)
@@ -711,11 +681,11 @@ class SkyNetRegressor(SkyNet):
 
         ### check file exitence ###
         if not os.path.isfile(self.network_file):
-            raise IOError("Network file %s not found " % (self.network_file))
+            raise IOError("Network file {} not found".format(self.network_file))
         if not os.path.isfile(self.train_input_file):
-            raise IOError("Input file %s not found " % (self.train_input_file))
+            raise IOError("Input file {} not found".format(self.train_input_file))
         if not os.path.isfile(self.pred_input_file):
-            raise IOError("Prediction file %s not found " % (self.pred_input_file))
+            raise IOError("Prediction file {} not found".format(self.pred_input_file))
 
         ### calulate predictions ###
         SkyNet_predictions_string = ''.join(['CalPred',
@@ -727,12 +697,12 @@ class SkyNetRegressor(SkyNet):
                                              ' 0 0 0'])
 
         p = subprocess.Popen(SkyNet_predictions_string,
-                             shell=True,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.STDOUT)
+                             shell = True,
+                             stdout = subprocess.PIPE,
+                             stderr = subprocess.STDOUT)
         out, err = p.communicate()
 
         ### read in prediction ####
-        predictions = np.loadtxt(self.output_file, usecols=[self.n_features_ + 1, ])
+        predictions = np.loadtxt(self.output_file, usecols = [self.n_features_ + 1, ])
 
         return predictions

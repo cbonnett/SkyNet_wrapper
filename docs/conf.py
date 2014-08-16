@@ -80,7 +80,8 @@ copyright = u'2014, Christopher Bonnett'
 # built documents.
 #
 # The short X.Y version.
-version = ''
+import SkyNet
+version = SkyNet.__version__
 # The full version, including alpha/beta/rc tags.
 release = ''
 

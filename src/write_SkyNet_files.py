@@ -3,7 +3,6 @@
    expected by SkyNet.
 """
 import numpy as np
-import re
 import pandas as pd
 
 __all__ = ["write_SkyNet_cla_bin", "write_SkyNet_reg", "write_SkyNet_config_file"]
@@ -50,7 +49,7 @@ def write_SkyNet_config_file(SkyNet_config_file,
             see attributes of :class:`SkyNetClassfier` and :class:`SkyNetRegressor`
 
     """
-    # ## reform activation format to SkyNet standard ###
+    ### reform activation format to SkyNet standard ###
     act_temp = ''
     for act in activation:
         act_temp = ''.join([act_temp, str(act)])
@@ -173,7 +172,7 @@ def write_SkyNet_reg(outfile, features, reg):
         reg : float array of [n_samples]
             The regression values that belong to the features.
     """
-    assert len(features[:, 0]) == len(reg), 'Length of feature array is equal to length of reg array'
+    assert len(features[:, 0]) == len(reg), "Length of feature array is not equal to length of reg array"
 
     outf = open(outfile, "w")
     outf.write(str(len(features[0, :])))
@@ -191,8 +190,12 @@ def write_SkyNet_reg(outfile, features, reg):
     outf.close()
 
 
-def _parse_SkyNet_output(out, iteration_frequency,
-                         classification_network, verbose, validation_data):
+def _parse_SkyNet_output(out,
+                         iteration_frequency,
+                         classification_network,
+                         verbose,
+                         validation_data):
+
     """Parse stdout from SkyNet
 
     Returns pandas dataframes with
@@ -219,16 +222,6 @@ def _parse_SkyNet_output(out, iteration_frequency,
         return None, None
 
     else:
-        # ## replace all tabs by spaces ###
-        out = out.replace('\t', '                ')
-        out = out.replace('\nValidation', '          \nValidation')
-        out = out.replace('\nBest value', '          \nBest value')
-        ### return all occurrences of Step ###
-        step_loc = [m.start() for m in re.finditer('Step', out)]
-        ### array with all step values ###
-        steps = np.arange(iteration_frequency,
-                          (len(step_loc) + 1) * iteration_frequency,
-                          iteration_frequency)
 
         train_error_array = []
         valid_error_array = []
@@ -239,50 +232,122 @@ def _parse_SkyNet_output(out, iteration_frequency,
         train_class_array = []
         valid_class_array = []
 
-        for i in xrange(len(step_loc)):
+        out = out.split()
 
-            out2 = out[step_loc[i]:step_loc[i] + 440]
+        step_loc = [i for i,word in enumerate(out) if out[i] == 'Step']
+        steps = np.arange(iteration_frequency,
+                          (len(step_loc) + 1) * iteration_frequency,
+                          iteration_frequency)
+
+        for i in (step_loc):
+            if classification_network:
+
+                train_corr_array.append(float(out[i + 11]))
+                train_error_array.append(float(out[i + 15]))
+                train_class_array.append(float(out[i + 16][:-1]))
+
+                valid_corr_array.append(float(out[i + 34]))
+                valid_error_array.append(float(out[i + 38]))
+                valid_class_array.append(float(out[i + 39][:-1]))
 
             if not classification_network:
-                corr_loc = [m.start() for m in re.finditer('combined correlation', out2)]
-                err_loc = [m.start() for m in re.finditer('error squared', out2)]
 
-                train_corr_array.append(float(out2[corr_loc[0] + 23:corr_loc[0] + 34].strip()))
-                valid_corr_array.append(float(out2[corr_loc[1] + 23:corr_loc[1] + 34].strip()))
+                train_corr_array.append(float(out[i + 12]))
+                train_error_array.append(float(out[i + 16]))
 
-                train_error_array.append(float(out2[err_loc[0] + 16:err_loc[0] + 29].strip()))
-                valid_error_array.append(float(out2[err_loc[1] + 16:err_loc[1] + 29].strip()))
-
-            if classification_network:
-                corr_loc = [m.start() for m in re.finditer('correlation', out2)]
-                err_loc = [m.start() for m in re.finditer('error squared', out2)]
-                class_loc = [m.start() for m in re.finditer('%', out2)]
-
-                train_corr_array.append(float(out2[corr_loc[0] + 13:corr_loc[0] + 24].strip()))
-                valid_corr_array.append(float(out2[corr_loc[1] + 13:corr_loc[1] + 24].strip()))
-
-                train_error_array.append(float(out2[err_loc[0] + 15:err_loc[0] + 28].strip()))
-                valid_error_array.append(float(out2[err_loc[1] + 15:err_loc[1] + 28].strip()))
-
-                train_class_array.append(float(out2[class_loc[0] - 10:class_loc[0]].strip()))
-                valid_class_array.append(float(out2[class_loc[2] - 10:class_loc[2]].strip()))
-
-                class_array = np.vstack((train_class_array, valid_class_array)).T
+                valid_corr_array.append(float(out[i + 26]))
+                valid_error_array.append(float(out[i + 30]))
 
         error_array = np.vstack((train_error_array, valid_error_array)).T
         corr_array = np.vstack((train_corr_array, valid_corr_array)).T
 
         df_error_array = pd.DataFrame(error_array, index=steps,
-                                      columns=['training error',
-                                      'validation error'])
+                                      columns=['Training error',
+                                      'Validation error'])
 
         df_corr_array = pd.DataFrame(corr_array, index=steps,
-                                     columns=['training correlation',
-                                     'validation correlation'])
+                                     columns=['Training correlation',
+                                     'Validation correlation'])
+
         if not classification_network:
+
+            #return out, out, out
             return df_error_array, df_corr_array, None
+
         if classification_network:
+
+            class_array = np.vstack((train_class_array, valid_class_array)).T
             df_class_array = pd.DataFrame(class_array, index=steps,
-                                          columns=['training classification error',
-                                          'validation classification error'])
+                                          columns=['Training classification performance',
+                                          'Validation classification performance'])
             return df_error_array, df_corr_array, df_class_array
+
+        # print out
+        # ### replace all tabs by spaces ###
+        # out = out.replace('\t', '                ')
+        # out = out.replace('\nValidation', '          \nValidation')
+        # out = out.replace('\nBest value', '          \nBest value')
+        # ### return all occurrences of Step ###
+        # step_loc = [m.start() for m in re.finditer('Step', out)]
+        # ### array with all step values ###
+        # steps = np.arange(iteration_frequency,
+        #                   (len(step_loc) + 1) * iteration_frequency,
+        #                   iteration_frequency)
+        #
+        # train_error_array = []
+        # valid_error_array = []
+        #
+        # train_corr_array = []
+        # valid_corr_array = []
+        #
+        # train_class_array = []
+        # valid_class_array = []
+        #
+        # for i in xrange(len(step_loc)):
+        #
+        #     out2 = out[step_loc[i]:step_loc[i] + 440]
+        #
+        #     if not classification_network:
+        #         corr_loc = [m.start() for m in re.finditer('combined correlation', out2)]
+        #         err_loc = [m.start() for m in re.finditer('error squared', out2)]
+        #
+        #         train_corr_array.append(float(out2[corr_loc[0] + 23:corr_loc[0] + 34].strip()))
+        #         valid_corr_array.append(float(out2[corr_loc[1] + 23:corr_loc[1] + 34].strip()))
+        #
+        #         train_error_array.append(float(out2[err_loc[0] + 16:err_loc[0] + 29].strip()))
+        #         valid_error_array.append(float(out2[err_loc[1] + 16:err_loc[1] + 29].strip()))
+        #
+        #     if classification_network:
+        #         corr_loc = [m.start() for m in re.finditer('correlation', out2)]
+        #         err_loc = [m.start() for m in re.finditer('error squared', out2)]
+        #         class_loc = [m.start() for m in re.finditer('%', out2)]
+        #
+        #         train_corr_array.append(float(out2[corr_loc[0] + 13:corr_loc[0] + 25].strip()))
+        #         valid_corr_array.append(float(out2[corr_loc[1] + 13:corr_loc[1] + 25].strip()))
+        #
+        #         train_error_array.append(float(out2[err_loc[0] + 15:err_loc[0] + 28].strip()))
+        #         valid_error_array.append(float(out2[err_loc[1] + 15:err_loc[1] + 28].strip()))
+        #
+        #         train_class_array.append(float(out2[class_loc[0] - 10:class_loc[0]].strip()))
+        #         valid_class_array.append(float(out2[class_loc[2] - 10:class_loc[2]].strip()))
+        #
+        #         class_array = np.vstack((train_class_array, valid_class_array)).T
+        #
+        # error_array = np.vstack((train_error_array, valid_error_array)).T
+        # corr_array = np.vstack((train_corr_array, valid_corr_array)).T
+        #
+        # df_error_array = pd.DataFrame(error_array, index=steps,
+        #                               columns=['training error',
+        #                               'validation error'])
+        #
+        # df_corr_array = pd.DataFrame(corr_array, index=steps,
+        #                              columns=['training correlation',
+        #                              'validation correlation'])
+        # if not classification_network:
+        #     return df_error_array, df_corr_array, None
+        # if classification_network:
+        #     df_class_array = pd.DataFrame(class_array, index=steps,
+        #                                   columns=['training classification error',
+        #                                   'validation classification error'])
+        #     #return df_error_array, df_corr_array, df_class_array
+        # return out,out,out
