@@ -133,6 +133,13 @@ class SkyNet():
                              stderr = subprocess.STDOUT)
         out, err = p.communicate()
 
+        ### exit pySkyNet if SkyNet throws an error ###
+        if len(err) > 0:
+            print "SkyNet error:"
+            print out
+            print "Exciting pySkyNet"
+            sys.exit(1)
+
         self.error_dataframe, self.corr_dataframe, self.class_dataframe = (
             binning._parse_SkyNet_output(out,
                                          self.iteration_print_frequency,
