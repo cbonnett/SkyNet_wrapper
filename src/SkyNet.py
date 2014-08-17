@@ -134,6 +134,8 @@ class SkyNet():
         out, err = p.communicate()
 
         print type(err)
+        if err == None:
+            print 'yep'
         ### exit pySkyNet if SkyNet throws an error ###
         # if err not None:
         #     print "SkyNet error:"
