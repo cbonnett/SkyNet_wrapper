@@ -23,7 +23,10 @@ reference : http://xxx.lanl.gov/abs/1309.0790
 # Authors: CHRISTOPHER BONNETT <c.bonnett@gmail.com>
 # Licence: BSD 3 clause
 
-__version__ = '0.1'
+__version__ = "0.1"
+__author__ = "Christopher Bonnett"
+__maintainer__ = "Christopher Bonnett"
+__email__ = "c.bonnett@gmail.com"
 
 import numpy as np
 import os
