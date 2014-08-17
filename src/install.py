@@ -3,6 +3,7 @@ import sys
 
 try:
     SkyNet_path =  os.environ["SKYNETPATH"]
+    SkyNet_path = ''.join([SkyNet_path,"/"])
 except:
     print "$SKYNETPATH is not set"
     print "Please set $SKYNETPATH" 
