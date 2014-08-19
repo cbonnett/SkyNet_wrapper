@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Neural Net convergence plots with pySkyNet &mdash; pySkyNet  documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.1.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="pySkyNet  documentation" href="index.html" />
+    <link rel="next" title="Which files are written to disk ?" href="files.html" />
+    <link rel="prev" title="An introduction to classification with pySkyNet" href="Classification.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          pySkyNet</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installl.html">Installing pySkyNet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Regression.html">An introduction to regression with pySkyNet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Classification.html">An introduction to classification with pySkyNet</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Neural Net convergence plots with pySkyNet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="files.html">Which files are written to disk ?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="SkyNet.html">SkyNet module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="write_SkyNet_files.html">write_SkyNet_files module</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Neural Net convergence plots with pySkyNet</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="neural-net-convergence-plots-with-pyskynet">
+<span id="convergenceplots"></span><h1>Neural Net convergence plots with pySkyNet<a class="headerlink" href="#neural-net-convergence-plots-with-pyskynet" title="Permalink to this headline">¶</a></h1>
+<p>Using <strong>pySkyNet</strong> is trivial to create convergence plots of the trained neural network for either
+regression of classification. For plotting we recommend the <a class="reference external" href="http://web.stanford.edu/~mwaskom/software/seaborn/">seaborn library</a> .
+Although it will work with matplotlib.
+The values are kept for each <tt class="docutils literal"><span class="pre">iteration_print_frequency</span></tt> for which the default value is 50.</p>
+<p>Here is an example on how to obtain the convergence plots:</p>
+<p>Setup:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_boston</span>
+<span class="kn">from</span> <span class="nn">sklearn.util</span> <span class="kn">import</span> <span class="n">shuffle</span>
+<span class="kn">from</span> <span class="nn">SkyNet</span> <span class="kn">import</span> <span class="n">SkyNetRegressor</span>
+
+<span class="c"># X are the features and y are the targets</span>
+<span class="c"># shuffle returns a random permutation</span>
+<span class="n">X</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">shuffle</span><span class="p">(</span><span class="n">load_boston</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="n">load_boston</span><span class="p">()</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">200</span><span class="p">]</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">200</span><span class="p">]</span>
+
+<span class="n">X_valid</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">200</span><span class="p">:</span><span class="mi">400</span><span class="p">]</span>
+<span class="n">y_valid</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">200</span><span class="p">:</span><span class="mi">400</span><span class="p">]</span>
+
+<span class="n">sn_reg</span> <span class="o">=</span> <span class="n">SkyNetRegressor</span><span class="p">(</span><span class="nb">id</span> <span class="o">=</span> <span class="s">&#39;identification_reg&#39;</span><span class="p">,</span> <span class="n">n_jobs</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                         <span class="n">activation</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">layers</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+                         <span class="n">max_iter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">iteration_print_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">sn_reg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">X_valid</span><span class="p">,</span><span class="n">y_valid</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Error squared as function of steps:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">sn_reg</span><span class="o">.</span><span class="n">error_dataframe</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/error.png" src="_images/error.png" />
+<p>Correlation as a function of steps:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">sn_reg</span><span class="o">.</span><span class="n">corr_dataframe</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/corr.png" src="_images/corr.png" />
+<p>When <tt class="docutils literal"><span class="pre">SkyNetClassifier</span></tt> is called, you can plot also plot the misclassification rate as a function of steps.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">sn_cla</span><span class="o">.</span><span class="n">class_dataframe</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/class.png" src="_images/class.png" />
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="_sources/convergenceplots.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, Christopher Bonnett.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

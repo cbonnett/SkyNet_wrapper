@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SkyNet module &mdash; pySkyNet  documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.1.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="pySkyNet  documentation" href="index.html" />
+    <link rel="next" title="write_SkyNet_files module" href="write_SkyNet_files.html" />
+    <link rel="prev" title="Which files are written to disk ?" href="files.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          pySkyNet</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="installl.html">Installing pySkyNet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Regression.html">An introduction to regression with pySkyNet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Classification.html">An introduction to classification with pySkyNet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="convergenceplots.html">Neural Net convergence plots with pySkyNet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="files.html">Which files are written to disk ?</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">SkyNet module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="write_SkyNet_files.html">write_SkyNet_files module</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">SkyNet module</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-SkyNet">
+<span id="skynet-module"></span><h1>SkyNet module<a class="headerlink" href="#module-SkyNet" title="Permalink to this headline">¶</a></h1>
+<p>A python wrapper for SkyNet neural network that
+can de downloaded here :
+<a class="reference external" href="http://ccpforge.cse.rl.ac.uk/gf/project/skynet/">http://ccpforge.cse.rl.ac.uk/gf/project/skynet/</a></p>
+<p>SkyNet is an efficient and robust neural network
+training code for machine learning. It is able to
+train large and deep feed-forward neural networks,
+including autoencoders, for use in a wide range of
+supervised and unsupervised learning applications,
+such as regression, classification, density estimation,
+clustering and dimensionality reduction. SkyNet is
+implemented in C/C++ and fully parallelised using MPI.</p>
+<p>SkyNet is written by Philip Graff, Farhan Feroz,
+Michael P. Hobson and Anthony N. Lasenby</p>
+<p>reference : <a class="reference external" href="http://xxx.lanl.gov/abs/1309.0790">http://xxx.lanl.gov/abs/1309.0790</a></p>
+<hr class="docutils" />
+<dl class="class">
+<dt id="SkyNet.SkyNetClassifier">
+<em class="property">class </em><tt class="descclassname">SkyNet.</tt><tt class="descname">SkyNetClassifier</tt><big>(</big><em>id</em>, <em>classification_network=True</em>, <em>input_root='/Users/Christopher_old/software_packages/skynet-1.2/train_valid/'</em>, <em>output_root='/Users/Christopher_old/software_packages/skynet-1.2/network/'</em>, <em>result_root='/Users/Christopher_old/software_packages/skynet-1.2/predictions/'</em>, <em>config_root='/Users/Christopher_old/software_packages/skynet-1.2/config_files/'</em>, <em>layers=(10</em>, <em>10</em>, <em>10)</em>, <em>activation=(2</em>, <em>2</em>, <em>2</em>, <em>0)</em>, <em>prior=True</em>, <em>confidence_rate=0.3</em>, <em>confidence_rate_minimum=0.02</em>, <em>iteration_print_frequency=50</em>, <em>max_iter=2000</em>, <em>whitenin=True</em>, <em>whitenout=True</em>, <em>noise_scaling=0</em>, <em>set_whitened_noise=False</em>, <em>sigma=0.035</em>, <em>fix_seed=False</em>, <em>fixed_seed=0</em>, <em>calculate_evidence=True</em>, <em>historic_maxent=False</em>, <em>recurrent=False</em>, <em>convergence_function=4</em>, <em>validation_data=True</em>, <em>verbose=2</em>, <em>pretrain=False</em>, <em>nepoch=10</em>, <em>line_search=0</em>, <em>mini_batch_fraction=1.0</em>, <em>resume=False</em>, <em>norbias=False</em>, <em>reset_alpha=False</em>, <em>reset_sigma=False</em>, <em>randomise_weights=0.1</em>, <em>n_jobs=1</em><big>)</big><a class="headerlink" href="#SkyNet.SkyNetClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">SkyNet.SkyNet</span></tt></p>
+<p>A neural net classifier.</p>
+<p>This class calls Skynet as a classifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>id</strong> : string, compulsory</p>
+<blockquote>
+<div><p>This is a base id used to as an identifier.
+All files written by Skynet will contain
+id in the file-name.</p>
+</div></blockquote>
+<p><strong>input_root</strong> : string, optional (default=custom)</p>
+<blockquote>
+<div><p>The folder where SkyNet-wrapper will write and SkyNet wil look for the train
+and validation files.</p>
+</div></blockquote>
+<p><strong>output_root</strong> : string, optional (default=custom)</p>
+<blockquote>
+<div><p>The folder where SkyNet will write the network file
+(i.e the trained weights)</p>
+</div></blockquote>
+<p><strong>result_root</strong> : string, optional (default=custom)</p>
+<blockquote>
+<div><p>The folder where SkyNet will write prediction
+files.</p>
+</div></blockquote>
+<p><strong>config_root</strong> : string, optional (default=custom)</p>
+<blockquote>
+<div><p>The folder where SkyNet will write the
+config file that it uses to train.</p>
+</div></blockquote>
+<p><strong>layers</strong> : tuple , optional (default=(10,10,10))</p>
+<blockquote>
+<div><p>The amount of hidden layers and the amount
+of nodes per hidden layer. Default is 3
+hidden layers with 10 nodes in each layer.</p>
+</div></blockquote>
+<p><strong>activation</strong> : tuple =, optional (default=(2,2,2,0))</p>
+<blockquote>
+<div><p>Which activation function to use per layer:
+0 = linear
+1 = sigmoid
+2 = tanh
+3 = rectified linear
+4 = sofsign
+Needs to have len(layers) + 1
+as the activation of the final
+layer needs to be set.</p>
+</div></blockquote>
+<p><strong>prior</strong> : boolean, optional (default =True)</p>
+<blockquote>
+<div><p>Use L2 weight regularization.
+Strongly advised.</p>
+</div></blockquote>
+<p><strong>mini-batch_fraction</strong> : float, optional(default=1.0)</p>
+<blockquote>
+<div><p>What fraction of training data to be used in each batch</p>
+</div></blockquote>
+<p><strong>validation_data</strong> : bool, optional (default = True)</p>
+<blockquote>
+<div><p>Is there validation data to test against?
+Strongly advise to use to prevent overfitting</p>
+</div></blockquote>
+<p><strong>confidence_rate</strong> : float, optional (default=0.03)</p>
+<blockquote>
+<div><p>Initial learning rate
+Step size factor, higher values are more aggressive.</p>
+</div></blockquote>
+<p><strong>confidence_rate_minimum</strong> : float, optional (default=0.02)</p>
+<blockquote>
+<div><p>minimum confidence rate allowed</p>
+</div></blockquote>
+<p><strong>iteration_print_frequency</strong> : int, optional (default=50)</p>
+<blockquote>
+<div><p>Skynet feedback frequency</p>
+</div></blockquote>
+<p><strong>max_iter</strong> : int, optional (default=2000)</p>
+<blockquote>
+<div><p>Maxium training epochs</p>
+</div></blockquote>
+<p><strong>n_jobs</strong> : integer, optional (default=1)</p>
+<blockquote>
+<div><p>The number of jobs to run in parallel for &#8216;fit&#8217;.</p>
+</div></blockquote>
+<p><strong>whitenin</strong> : integer, optional (default=1)</p>
+<blockquote>
+<div><p>Which input transformation to use:
+0 = none
+1 = min-max
+2 = normal.</p>
+</div></blockquote>
+<p><strong>whitenout</strong> : integer, optional (default=1)</p>
+<blockquote>
+<div><p>Which output transformation to use:
+0 = none
+1 = min-max
+2 = normal.</p>
+</div></blockquote>
+<p><strong>convergence_function</strong> : integer, optional (default=4)</p>
+<blockquote>
+<div><p>Which  minimization function to use for
+convergence testing:
+1 = log-posterior
+2 = log-likelihood
+3 = correlation
+4 = error squared.</p>
+</div></blockquote>
+<p><strong>historic_maxent</strong> : bool, optional (default=False)</p>
+<blockquote>
+<div><p>Experimental implementation of MemSys&#8217;s historic maxent option.</p>
+</div></blockquote>
+<p><strong>line_search</strong> : int, optional (default = 0)</p>
+<blockquote>
+<div><p>Perform line search for optimal distance:
+0 = none
+1 = golden section
+2 = linbcg lnsrch.</p>
+</div></blockquote>
+<p><strong>noise_scaling</strong> : bool, optional (default = False)</p>
+<blockquote>
+<div><p>If noise level (standard deviation of outputs) is to be estimated.</p>
+</div></blockquote>
+<p><strong>set_whitened_noise</strong> : bool, optional (default =False)</p>
+<blockquote>
+<div><p>Whether the noise is to be set on whitened data.</p>
+</div></blockquote>
+<p><strong>sigma</strong> : float, optional (default = 0.3)</p>
+<blockquote>
+<div><p>Initial noise level, set on (un-)whitened data.</p>
+</div></blockquote>
+<p><strong>fix_seed</strong> : bool, optional (default =False)</p>
+<blockquote>
+<div><p>Use a fixed seed?
+Useful for debugging and unit-test.</p>
+</div></blockquote>
+<p><strong>fixed_seed</strong> : int, optional (default =0)</p>
+<blockquote>
+<div><p>Seed to use if fix_seed == True.</p>
+</div></blockquote>
+<p><strong>resume</strong> : bool, optional (default = False)</p>
+<blockquote>
+<div><p>Resume from a previous job.</p>
+</div></blockquote>
+<p><strong>reset_alpha</strong> : bool, optional (default = False)</p>
+<blockquote>
+<div><p>Reset hyperparameter upon resume.</p>
+</div></blockquote>
+<p><strong>reset_sigma</strong> : bool, optional (default = False)</p>
+<blockquote>
+<div><p>reset hyperparameters upon resume.</p>
+</div></blockquote>
+<p><strong>randomise_weights</strong> : float, optional (default = 0.01)</p>
+<blockquote>
+<div><p>Random factor to add to saved weights upon resume.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : int, optional (default=2)</p>
+<blockquote>
+<div><p>Verbosity level of feedback sent to stdout
+by SkyNet (0=min, 3=max).</p>
+</div></blockquote>
+<p><strong>pretrain</strong> : bool,</p>
+<blockquote>
+<div><p>Perform pre-training using
+restricted BM.</p>
+</div></blockquote>
+<p><strong>nepoch</strong> : int, optional (default=10)</p>
+<blockquote class="last">
+<div><p>Number of epochs to use in pre-training.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#SkyNet.SkyNetRegressor" title="SkyNet.SkyNetRegressor"><tt class="xref py py-obj docutils literal"><span class="pre">SkyNetRegressor</span></tt></a></p>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R1]</a></td><td>SKYNET: an efficient and robust neural network
+training tool for machine learning in
+astronomy <a class="reference external" href="http://arxiv.org/abs/1309.0790">http://arxiv.org/abs/1309.0790</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="11%" />
+<col width="62%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>n_features</td>
+<td>int</td>
+<td>The number of features.</td>
+</tr>
+<tr class="row-even"><td>train_input_file</td>
+<td>string</td>
+<td>Filename of the written training file.</td>
+</tr>
+<tr class="row-odd"><td>valid_input_file</td>
+<td>string.</td>
+<td>Filename of the written validation file.</td>
+</tr>
+<tr class="row-even"><td>SkyNet_config_file</td>
+<td>string</td>
+<td>Filename of SkyNet config file.</td>
+</tr>
+<tr class="row-odd"><td>network_file</td>
+<td>string</td>
+<td>Filename of SkyNet network file.
+This file contains the trained weights:</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="SkyNet.SkyNetClassifier.predict_proba">
+<tt class="descname">predict_proba</tt><big>(</big><em>X</em><big>)</big><a class="headerlink" href="#SkyNet.SkyNetClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict class probabilities for X.</p>
+<p>The predicted class probabilities of an input sample is computed as
+by trained neural network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>X</strong> : array-like of shape = [n_samples, n_features]</p>
+<blockquote>
+<div><p>The input samples.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>p</strong> : array of shape = [n_samples,n_classes]</p>
+<blockquote class="last">
+<div><p>The class probabilities of the input samples. The order of the
+classes corresponds to that in the attribute <cite>classes_</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="10%" />
+<col width="71%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>output_file</td>
+<td>String</td>
+<td>SkyNet writes to this file:
+result_root + self.id + _predictions.txt.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="SkyNet.SkyNetRegressor">
+<em class="property">class </em><tt class="descclassname">SkyNet.</tt><tt class="descname">SkyNetRegressor</tt><big>(</big><em>id</em>, <em>classification_network=False</em>, <em>input_root='/Users/Christopher_old/software_packages/skynet-1.2/train_valid/'</em>, <em>output_root='/Users/Christopher_old/software_packages/skynet-1.2/network/'</em>, <em>result_root='/Users/Christopher_old/software_packages/skynet-1.2/predictions/'</em>, <em>config_root='/Users/Christopher_old/software_packages/skynet-1.2/config_files/'</em>, <em>layers=(10</em>, <em>10</em>, <em>10)</em>, <em>activation=(2</em>, <em>2</em>, <em>2</em>, <em>0)</em>, <em>prior=True</em>, <em>confidence_rate=0.3</em>, <em>confidence_rate_minimum=0.02</em>, <em>iteration_print_frequency=50</em>, <em>max_iter=2000</em>, <em>whitenin=True</em>, <em>whitenout=True</em>, <em>noise_scaling=0</em>, <em>set_whitened_noise=False</em>, <em>sigma=0.035</em>, <em>fix_seed=False</em>, <em>fixed_seed=0</em>, <em>calculate_evidence=True</em>, <em>historic_maxent=False</em>, <em>recurrent=False</em>, <em>convergence_function=4</em>, <em>validation_data=True</em>, <em>verbose=2</em>, <em>pretrain=False</em>, <em>nepoch=10</em>, <em>line_search=0</em>, <em>mini_batch_fraction=1.0</em>, <em>resume=False</em>, <em>norbias=False</em>, <em>reset_alpha=False</em>, <em>reset_sigma=False</em>, <em>randomise_weights=0.1</em>, <em>n_jobs=1</em><big>)</big><a class="headerlink" href="#SkyNet.SkyNetRegressor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">SkyNet.SkyNet</span></tt></p>
+<p>A neural net regeressor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>id</strong> : string, compulsory</p>
+<blockquote>
+<div><p>This is a base id used to as an identifier.</p>
+</div></blockquote>
+<p><strong>input_root</strong> : string, optional (default=custom)</p>
+<blockquote>
+<div><p>The folder where SkyNet-wrapper will write and SkyNet wil look for the train
+and validation files.</p>
+</div></blockquote>
+<p><strong>output_root</strong> : string, optional (default=custom)</p>
+<blockquote>
+<div><p>The folder where SkyNet will write the network file
+(i.e the trained weights)</p>
+</div></blockquote>
+<p><strong>result_root</strong> : string, optional (default=custom)</p>
+<blockquote>
+<div><p>The folder where SkyNet will write prediction
+files.</p>
+</div></blockquote>
+<p><strong>config_root</strong> : string, optional (default=custom)</p>
+<blockquote>
+<div><p>The folder where SkyNet will write the
+config file that it uses to train.
+This parameter is best adjusted
+in SkyNet.py</p>
+</div></blockquote>
+<p><strong>layers</strong> : tuple , optional (default=(10,10,10))</p>
+<blockquote>
+<div><p>The amount of hidden layers and the amount
+of nodes per hidden layer. Default is 3
+hidden layers with 10 nodes in each layer.</p>
+</div></blockquote>
+<p><strong>activation</strong> : tuple =, optional (default=(2,2,2,0))</p>
+<blockquote>
+<div><p>Which activation function to use per layer:
+0 = linear
+1 = sigmoid
+2 = tanh
+3 = rectified linear
+4 = sofsign
+Needs to have len(layers) + 1
+as the activation of the final
+layer needs to be set.</p>
+</div></blockquote>
+<p><strong>prior</strong> : boolean, optional (default =True)</p>
+<blockquote>
+<div><p>Use L2 weight regularization.
+Strongly advised.</p>
+</div></blockquote>
+<p><strong>mini-batch_fraction</strong> : float, optional(default=1.0)</p>
+<blockquote>
+<div><p>What fraction of training data to be used in each batch</p>
+</div></blockquote>
+<p><strong>validation_data</strong> : bool, optional (default = True)</p>
+<blockquote>
+<div><p>Is there validation data to test against?
+Strongly advise to use to prevent overfitting</p>
+</div></blockquote>
+<p><strong>confidence_rate</strong> : float, optional (default=0.03)</p>
+<blockquote>
+<div><p>Initial learing rate
+Step size factor, higher values are more aggressive.</p>
+</div></blockquote>
+<p><strong>confidence_rate_minimum</strong> : float, optional (default=0.02)</p>
+<blockquote>
+<div><p>minimum confidence rate allowed</p>
+</div></blockquote>
+<p><strong>iteration_print_frequency</strong> : int, optional (default=50)</p>
+<blockquote>
+<div><p>Skynet feedback frequency</p>
+</div></blockquote>
+<p><strong>max_iter</strong> : int, optional (default=2000)</p>
+<blockquote>
+<div><p>Maxium training epochs</p>
+</div></blockquote>
+<p><strong>n_jobs</strong> : integer, optional (default=1)</p>
+<blockquote>
+<div><p>The number of jobs to run in parallel for &#8216;fit&#8217;.</p>
+</div></blockquote>
+<p><strong>whitenin</strong> : integer, optional (default=1)</p>
+<blockquote>
+<div><p>Which input transformation to use:
+0 = none
+1 = min-max
+2 = normal.</p>
+</div></blockquote>
+<p><strong>whitenout</strong> : integer, optional (default=1)</p>
+<blockquote>
+<div><p>Which output transformation to use:
+0 = none
+1 = min-max
+2 = normal.</p>
+</div></blockquote>
+<p><strong>convergence_function</strong> : integer, optional (default=4)</p>
+<blockquote>
+<div><p>Which  minimization function to use for
+convergence testing:
+1 = log-posterior
+2 = log-likelihood
+3 = correlation
+4 = error squared.</p>
+</div></blockquote>
+<p><strong>historic_maxent</strong> : bool, optional (default=False)</p>
+<blockquote>
+<div><p>Experimental implementation of MemSys&#8217;s historic maxent option.</p>
+</div></blockquote>
+<p><strong>line_search</strong> : int, optional (default = 0)</p>
+<blockquote>
+<div><p>Perform line search for optimal distance:
+0 = none
+1 = golden section
+2 = linbcg lnsrch.</p>
+</div></blockquote>
+<p><strong>noise_scaling</strong> : bool, optional (default = False)</p>
+<blockquote>
+<div><p>If noise level (standard deviation of outputs) is to be estimated.</p>
+</div></blockquote>
+<p><strong>set_whitened_noise</strong> : bool, optional (default =False)</p>
+<blockquote>
+<div><p>Whether the noise is to be set on whitened data.</p>
+</div></blockquote>
+<p><strong>sigma</strong> : float, optional (default = 0.3)</p>
+<blockquote>
+<div><p>Initial noise level, set on (un-)whitened data.</p>
+</div></blockquote>
+<p><strong>fix_seed</strong> : bool, optional (default =False)</p>
+<blockquote>
+<div><p>Use a fixed seed?
+Usefull for debugging and unit-test.</p>
+</div></blockquote>
+<p><strong>fixed_seed</strong> : int, optional (default =0)</p>
+<blockquote>
+<div><p>Seed to use if fix_seed == True.</p>
+</div></blockquote>
+<p><strong>resume</strong> : bool, optional (default = False)</p>
+<blockquote>
+<div><p>Resume from a previous job.</p>
+</div></blockquote>
+<p><strong>reset_alpha</strong> : bool, optional (default = False)</p>
+<blockquote>
+<div><p>Reset hyperparameter upon resume.</p>
+</div></blockquote>
+<p><strong>reset_sigma</strong> : bool, optional (default = False)</p>
+<blockquote>
+<div><p>reset hyperparameters upon resume.</p>
+</div></blockquote>
+<p><strong>randomise_weights</strong> : float, optional (default = 0.01)</p>
+<blockquote>
+<div><p>Random factor to add to saved weights upon resume.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : int, optional (default=2)</p>
+<blockquote>
+<div><p>Verbosity level of feedback sent to stdout
+by SkyNet (0=min, 3=max).</p>
+</div></blockquote>
+<p><strong>pretrain</strong> : bool,</p>
+<blockquote>
+<div><p>Perform pre-training using
+restricted BM.</p>
+</div></blockquote>
+<p><strong>nepoch</strong> : int, optional (default=10)</p>
+<blockquote class="last">
+<div><p>Number of epochs to use in pre-training.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#SkyNet.SkyNetClassifier" title="SkyNet.SkyNetClassifier"><tt class="xref py py-obj docutils literal"><span class="pre">SkyNetClassifier</span></tt></a></p>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R2]</a></td><td>SKYNET: an efficient and robust neural network
+training tool for machine learning in
+astronomy <a class="reference external" href="http://arxiv.org/abs/1309.0790">http://arxiv.org/abs/1309.0790</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="11%" />
+<col width="62%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>n_features</td>
+<td>int</td>
+<td>The number of features.</td>
+</tr>
+<tr class="row-even"><td>train_input_file</td>
+<td>string</td>
+<td>Filename of the written training file.</td>
+</tr>
+<tr class="row-odd"><td>valid_input_file</td>
+<td>string.</td>
+<td>Filename of the written validation file.</td>
+</tr>
+<tr class="row-even"><td>SkyNet_config_file</td>
+<td>string</td>
+<td>Filename of SkyNet config file.</td>
+</tr>
+<tr class="row-odd"><td>network_file</td>
+<td>string</td>
+<td>Filename of SkyNet network file.
+This file contains the trained weights:</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="SkyNet.SkyNetRegressor.predict">
+<tt class="descname">predict</tt><big>(</big><em>X</em><big>)</big><a class="headerlink" href="#SkyNet.SkyNetRegressor.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict regression target for X.</p>
+<p>The predicted regression target of an input sample is by the trained
+neural network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>X</strong> : array-like of shape = [n_samples, n_features]</p>
+<blockquote>
+<div><p>The input samples.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>y: array of shape = [n_samples]</strong> :</p>
+<blockquote class="last">
+<div><p>The predicted values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="14%" />
+<col width="61%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>output_file</td>
+<td>String</td>
+<td>SkyNet writes to this file:</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="_sources/SkyNet.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, Christopher Bonnett.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
