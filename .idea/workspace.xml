@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ee0b8c4b-7992-4575-8082-4fa842f12c2c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/installl.rst" afterPath="$PROJECT_DIR$/docs/installl.rst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="SkyNet_wrapper.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -106,8 +105,8 @@
       <file leaf-file-name="installl.rst" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/docs/installl.rst">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.06531204" vertical-offset="0" max-vertical-offset="1050">
-              <caret line="3" column="9" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.15239477" vertical-offset="0" max-vertical-offset="1050">
+              <caret line="7" column="84" selection-start-line="7" selection-start-column="84" selection-end-line="7" selection-end-column="84" />
               <folding />
             </state>
           </provider>
@@ -912,8 +911,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/installl.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.06531204" vertical-offset="0" max-vertical-offset="1050">
-          <caret line="3" column="9" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.15239477" vertical-offset="0" max-vertical-offset="1050">
+          <caret line="7" column="84" selection-start-line="7" selection-start-column="84" selection-end-line="7" selection-end-column="84" />
           <folding />
         </state>
       </provider>

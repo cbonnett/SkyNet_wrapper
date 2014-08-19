@@ -5,7 +5,7 @@ Installing pySkyNet
 
     | Python dependencies : numpy, pandas
     | For plotting : matplotlib, we recommend you use `seaborn <http://web.stanford.edu/~mwaskom/software/seaborn/>`_
-    | `The anaconda python distribution <https://store.continuum.io/cshop/anaconda/> `_  contains all the necessary libraries for all platforms.
+    | `The anaconda python distribution <https://store.continuum.io/cshop/anaconda/>`_  contains all the necessary libraries for all platforms.
 
 
 | As **pySkyNet** is a poor man's wrapper of SkyNet it performs system calls to **SkyNet**.
