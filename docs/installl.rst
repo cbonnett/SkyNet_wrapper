@@ -42,7 +42,7 @@ Once the $SKYNETPATH is set, in the **pySkyNet** repo you run:
 
 .. code:: python
 
-    $ python install.py
+    $ python src/install.py
 
 This will create 4 subfolders in $SKYNETPATH:
  - $SKYNETPATH/train_valid 
