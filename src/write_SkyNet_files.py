@@ -4,6 +4,7 @@
 """
 import numpy as np
 import pandas as pd
+import warnings
 
 __all__ = ["write_SkyNet_cla_bin", "write_SkyNet_reg", "write_SkyNet_config_file"]
 
@@ -148,7 +149,7 @@ def write_SkyNet_cla_bin(outfile, features, classes):
     elif classes.min() == 0:
         pass
     else:
-        raise Exception("minimum of classes array is not 0 or 1")
+        warnings.warn("minimum of classes array is not 0 or 1")
 
     for k in np.arange(len(classes)):
         a = ','.join([str(i) for i in features[k, :]])
