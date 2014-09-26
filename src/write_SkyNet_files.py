@@ -150,6 +150,7 @@ def write_SkyNet_cla_bin(outfile, features, classes):
         pass
     else:
         warnings.warn("minimum of classes array is not 0 or 1")
+        classes -= 1
 
     for k in np.arange(len(classes)):
         a = ','.join([str(i) for i in features[k, :]])
