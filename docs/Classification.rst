@@ -58,7 +58,7 @@ Getting the predictions for the test set
 
 .. code:: python
 
-    test_yhat = sn_class.predict_proba(X_test)
+    test_yhat = sn_cla.predict_proba(X_test)
     
 All code combined  
 

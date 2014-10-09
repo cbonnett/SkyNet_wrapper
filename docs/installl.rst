@@ -30,13 +30,13 @@ Bash shell:
 
 .. code::
 
-    $ export SKYNETPATH /path/where/you/want/to/store/skynet/data/
+    $ export SKYNETPATH=/path/where/you/want/to/store/skynet/data/
 
 c-shell:
 
 .. code::
 
-    $ SETENV SKYNETPATH /path/where/you/want/to/store/skynet/data/
+    $ setenv SKYNETPATH /path/where/you/want/to/store/skynet/data/
 
 Once the $SKYNETPATH is set, in the **pySkyNet** repo you run: 
 
