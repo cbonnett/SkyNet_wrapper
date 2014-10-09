@@ -85,4 +85,4 @@ All code combined
     
     sn_cla.fit(X_train, y_train, X_valid, y_valid)
     
-    test_yhat = sn_class.predict_proba(X_test)
+    test_yhat = sn_cla.predict_proba(X_test)
